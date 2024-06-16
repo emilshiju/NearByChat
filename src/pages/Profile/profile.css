@@ -1,0 +1,6 @@
+.component-background-black {
+    background-color: black;
+    color: white; /* Optional: sets the default text color to white */
+    min-height: 100vh; /* Ensure it covers the full viewport height */
+    padding: 16px;
+}

@@ -1,0 +1,58 @@
+.map-container {
+    margin-left:290px;
+    height: 100vh;
+  }
+  
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+  .sidebar {
+    background-color: rgb(35 55 75 / 90%);
+    color: #fff;
+    padding: 6px 12px;
+    font-family: monospace;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 12px;
+    border-radius: 4px;
+  }
+  .custom-map-button {
+  position: absolute;
+  top: 9px; /* Adjust position as needed */
+  left: 810px; /* Adjust position as needed */
+  height: 40px;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px; 
+  padding: 9px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10; /* Ensure it appears above the map */
+}
+.searchButton {
+  position: absolute;
+  z-index: 10;
+  left: 330px;
+  top: 90px;
+  border-radius: 5px;
+    border: 1px solid #000;
+    color:black;
+    padding: 6px 10px;
+    background: yellow;
+    font-size: 1em;
+    cursor: pointer;
+  cursor: pointer;
+}
+
+/* Optional: add a hover effect */
+.searchButton:hover {
+  background-color: #ffeb3b; /* Slightly darker yellow on hover */
+}
+
+.custom-google-login-button {
+  width: 200px;
+  height: 50px;
+  font-size: 36px;
+}
