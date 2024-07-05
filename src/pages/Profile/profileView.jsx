@@ -1,5 +1,5 @@
 import React ,{useEffect,useState,useContext} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams ,useNavigate} from 'react-router-dom';
 import Sidebar from '../../components/sideBar';
 import { FaSpinner } from "react-icons/fa";
 import getProfile from "../../service/getProfile";
@@ -10,12 +10,14 @@ import { useSelector } from "react-redux";
 import Notification from '../../components/notification';
 import { SocketContext } from "../../context/socket";
 import api from '../../route/interceptors';
-
+import NewMessageNotificatoin from '../../components/messageNotification';
 
 const profileView=()=>{
-    const { id } = useParams();
+    const { receiverId } = useParams();
     const userInfo = useSelector((state) => state.auth.userInfo);
     const socket=useContext(SocketContext)
+
+    const navigate = useNavigate();
 
 
     const [nickName,setNickName]=useState('name')
@@ -26,9 +28,14 @@ const profileView=()=>{
     const [receiverProfileId,setReceiverId]=useState(null)
     const [userStatus,setUserStatus]=useState(false)
 
+
+
+
     useEffect(() => {
-        getProfile(id).then((res) => {
+        getProfile(receiverId).then((res) => {
           
+          {console.log("responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")}
+          {console.log(res)}
           setReceiverId(res.response._id)
 
           
@@ -43,62 +50,118 @@ const profileView=()=>{
           setImage(res.response.imageUrl);
           
         });
-        getProfile(userInfo._id).then((res)=>{
+        // getProfile(userInfo._id).then((res)=>{
           
-          setUserProfile(res.response._id)
-        })
+        //   setUserProfile(res.response._id)
+        // })
         
       }, []);
 
-      const [notification,setNotification]=useState(null)
-      const closeNotification = () => {
-        setNotification(null);
-      };
+      const [newMessage,setNewMessage]=useState(null)
+
+ 
+      useEffect(()=>{
+        socket.on('newMessageNotification',(response)=>{
+       
+          setNewMessage(response)
+        })
+    
+        return ()=>{
+          socket.off('newMessageNotification')
+        }
+      })
+
+
+
+
+
+     
+    const [notification,setNotification]=useState(null)
+    const closeNotification = () => {
+      setNotification(null);
+    };
     
 
-      useEffect(()=>{
+    const getConnectionStatus=()=>{
 
-        api.get(`/checkConnectionStatus?userId=${userInfo._id}&id=${id}`)
+
+      api.get(`/checkConnectionStatus?userId=${userInfo._id}&id=${receiverId}`)
         .then((res)=>{
+        
           setUserStatus(res.data.status)
          
         })
+
+
+    }
+
+      useEffect(()=>{
         socket.emit('on',(userInfo._id))
+
+        getConnectionStatus()
+      
         socket.on('notification', (message) => {
       
           console.log('Notification received:', message);
+       
           setNotification(message)
+         
           // alert('Notification: ' + message);
          });
+
+         socket.on('updateConnectionStatus',()=>{
+         
+          getConnectionStatus()
+         })
 
         return ()=>{
           socket.off('notification');
         }
-      })
+      },[])
+
+      useEffect(()=>{
+        getConnectionStatus()
+      },[notification])
 
 
       const connectButton=(userName,senderId,receiverId)=>{
        
         try{
     
-          socket.emit('connectionRequested',userName,senderId,receiverId,userProfileId,receiverProfileId)
-        //  socket.emit("connectionNotification",userName,senderId,receiverId,userProfileId,receiverProfileId)
-        //  .then((res)=>{
-        //   alert("hey")
-        //  })
+          socket.emit('connectionRequested',userName,senderId,receiverId)
+     
         }catch(error){
           alert(error)
         }
-         
-         
-          // connection(senderId,receiverId)
+      
           
       }
+
+      const messageButton=(received)=>{
+        navigate(`/chatBox/${received}`)
+      }
+
+      
+
+      const acceptRequest=(senderId,receiverId)=>{
+        
+        
     
+        socket.emit('acceptedRequest',senderId,receiverId)
+        // getConnectionStatus()
+  
+       }
+
+     const gotoSendMessage=()=>{
+
+      navigate(`/chatBox/${receiverId}`)
+      
+     }
   
 
     return(
         <div>
+         {newMessage&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
              <Sidebar />
              {notification&&<Notification   message={notification} onClose={closeNotification}  />}
              <main
@@ -210,25 +273,70 @@ const profileView=()=>{
           </header>
 
           <div style={{ paddingLeft: "320px" }}>
-
-           
-              {userStatus == true?
+{/*     
+              {userStatus&&userStatus?.status == 'true'&&
             <button
               
               className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              onClick={()=>messageButton(receiverId)}
               // onClick={()=>connectButton(userInfo.userName,userInfo._id,id,userProfileId,receiverProfileId)}
             >
               Message
             </button>
-            :
+            }      */}
+
+     {userStatus&&userStatus?.status == 'false'&&
             <button
               
               className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-              onClick={()=>connectButton(userInfo.userName,userInfo._id,id,userProfileId,receiverProfileId)}
+              onClick={()=>connectButton(userInfo.userName,userInfo._id,receiverId)}
             >
               Connect
             </button>
              }
+
+{userStatus&&userStatus?.status == 'Accept'&&
+            <button
+              
+              className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              onClick={()=>acceptRequest( receiverId,userInfo._id)}
+            >
+              Accept
+            </button>
+             }
+
+
+{userStatus&&userStatus == 'false'&&
+            <button
+              
+              className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              onClick={()=>connectButton(userInfo.userName,userInfo._id,receiverId)}
+            >
+              Connect
+            </button>
+             }
+
+             {userStatus&&userStatus?.status == 'pending'&&
+              <button
+                
+                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                // onClick={()=>connectButton(userInfo.userName,userInfo._id,receiverId)}
+              >
+                  Requested
+              </button>
+               }
+
+{userStatus&&userStatus?.status == 'true'&&
+              <button
+                
+                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                onClick={gotoSendMessage}
+              >
+                  message
+              </button>
+               }
+
+
           </div>
 
           {/* <div style={{ paddingLeft: "315px" }}>

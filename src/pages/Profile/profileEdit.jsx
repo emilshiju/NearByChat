@@ -87,6 +87,18 @@ const ProfileEditUser = () => {
   const handleFileChange = (e) => {
     setOpen(false);
     const file = e.target.files[0];
+
+
+    const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB limit
+           
+    if (file.size > maxSizeInBytes) {
+        alert("File size exceeds the limit (1 MB). Please select a smaller file.");
+        // Optionally, reset the file input to clear the selected file
+        e.target.value = null;
+        return;
+    }
+
+
     setPath(e.target.files[0]);
     const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);

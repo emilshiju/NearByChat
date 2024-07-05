@@ -67,13 +67,18 @@ api.interceptors.response.use(function (response) {
     return response;
   }, async function (error) {
 alert("error in intercetor")
+  
+if(error.response.status === 402){
+  alert(error.response.data.message)
+}
+alert(error.response.status)
     
     const originalRequest = error.config;
     
     if(error.response.status === 403){
       alert("account blocked")
     }
-
+ 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
@@ -97,10 +102,10 @@ alert("error in intercetor")
 
 
   async function refreshToken() {
-    const { userName } = JSON.parse(localStorage.getItem('userInfo'));
+    const { userName ,role , _id } = JSON.parse(localStorage.getItem('userInfo'));
   
     try {
-      const response = await api.post('/refresh', { userName });
+      const response = await api.post('/refresh', { userName ,userId:_id});
       // const { accesstoken } = response.data.data
       const accesstoken=response.data.data
       

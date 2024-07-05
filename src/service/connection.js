@@ -13,6 +13,9 @@ const connection=(userId )=>{
             if(response.data.status){
                 resolve(response.data.allNotification)
             }
+            if(!response.data.status){
+                
+            }
         })
         .catch((error)=>{
             alert("error")

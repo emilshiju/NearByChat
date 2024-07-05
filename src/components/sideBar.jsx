@@ -6,17 +6,23 @@ import HomeIcon from '@mui/icons-material/Home';
 import api from "../route/interceptors";
 import { Link } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
-
+import { useNavigate, useParams } from "react-router-dom";
 import { removeUserCredential } from "../store/authSlice";
 import { useDispatch} from 'react-redux';
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
- 
+    
+
+  const navigate = useNavigate();
+
+
 
   const handleLogout=()=>{
     dispatch(removeUserCredential())
+    navigate('/login')
+    
   }
 
   return (
@@ -73,7 +79,7 @@ const Sidebar = () => {
         </ul>
      
         <div   className=" flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center " style={{paddingTop:'30px'}}
-        onClick={()=>handleLogout()}
+        onClick={handleLogout}
         >
           <div  className="flex items-center gap-x-4 w-full">
           <LogoutIcon />

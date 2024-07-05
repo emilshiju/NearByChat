@@ -9,7 +9,7 @@ const profileForm=(userId,nickName,bio,profession)=>{
         api.post('/submitProfile',{userId,nickName,bio,profession})
         .then((response)=>{
             if(response.data.status){
-                resolve(response.data.status)
+                resolve(response.data.data)
             }
         })
         .catch((error)=>{

@@ -13,12 +13,13 @@ import ProfileView from "./pages/Profile/profileView"
 import LocationPinAnimation from "./components/locationpinAnimation";
 import { useEffect } from "react"
 import NotificationList from "../src/pages/Notification/notificationList"
-import ChatBox from "./pages/chat/chatBox"
-
+import ChatBox from "../src/pages/chat/chatBox"
+import VideoCall from "./components/videoCall/videoCall"
+import PermissionNotification from "./components/permisionNotification"
 const router=createBrowserRouter([
    
     {
-        path:"/",
+        path:"/:status?",
         element:(<UserProtectedRoute ><Home /></UserProtectedRoute>)
        
         
@@ -28,7 +29,7 @@ const router=createBrowserRouter([
         element:(<ProtectedRoute ><Login /></ProtectedRoute>)
     },
     {
-        path:"/register",
+        path:"/register/:status?",
         element:(<ProtectedRoute><Register/></ProtectedRoute >)
         
     },
@@ -41,18 +42,26 @@ const router=createBrowserRouter([
         element:(<UserProtectedRoute><ProfileEditUser /></UserProtectedRoute>)
     },
     {
-        path:"/userView/:id",
-        element:(<ProfileView  />)
+        path:"/userView/:receiverId",
+        element:(<UserProtectedRoute><ProfileView  /></UserProtectedRoute>)
     },{
         path:"/show",
-        element:(<LocationPinAnimation />)
+        element:(<UserProtectedRoute><LocationPinAnimation /></UserProtectedRoute>)
     },{
         path:"/notification",
-        element:(<NotificationList />)
+        element:(<UserProtectedRoute><NotificationList /></UserProtectedRoute>)
     },
     {
-        path:"/chatBox/:id/:myid",
+        path:"/chatBox/:receiverId?",
         element:(<ChatBox />)
+    },
+    {
+        path:'/videoCall/:status?',
+        element:(<VideoCall />),
+    },
+    {
+        path:'/permission',
+        element:(<PermissionNotification />)
     }
 ])
 

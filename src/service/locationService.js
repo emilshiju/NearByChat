@@ -6,7 +6,7 @@ const locationService=(userInfo,value)=>{
   
   return new Promise((resolve,reject)=>{
 
-   alert("dskuhf")
+   
 
     api.post("/findUser", {
           userId: userInfo._id,

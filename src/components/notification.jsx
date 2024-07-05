@@ -10,8 +10,6 @@ const Notification = ({message,onClose}) => {
     //     // Clear the timer on unmount or when the notification is closed manually
     //     return () => clearTimeout(timer);
     //   }, []);
-    alert("jhhhhhkkjhjhhihihhiuhkh")
-
     
 
   return (
@@ -33,18 +31,19 @@ const Notification = ({message,onClose}) => {
 <div className="flex justify-between px-3 py-1 bg-white items-center gap-1 rounded-lg border border-gray-100 my-3">
   <div className="relative w-14 h-14 rounded-full hover:bg-red-700 bg-gradient-to-r from-purple-400 via-blue-500 to-red-400">
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-gray-200 rounded-full border-2 border-white">
-      <img className="w-full h-full object-cover rounded-full" src={message?.senderProfile?.imageUrl} alt="" />
+      {message.senderId._id&&<img className="w-full h-full object-cover rounded-full" src={message.senderId?.imageUrl} alt="" />}
+      {message.receiverId._id&&<img className="w-full h-full object-cover rounded-full" src={message.receiverId?.imageUrl} alt="" />}
     </div>
   </div>
   <div>
     <span className="font-mono">{message?.message}</span>
   </div>
   <div className="flex gap-2">
-    <button className="focus:outline-none">
+    {/* <button className="focus:outline-none">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 hover:text-gray-900" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
       </svg>
-    </button>
+    </button> */}
     <button className="focus:outline-none"
     onClick={onClose}
     >

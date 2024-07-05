@@ -12,10 +12,13 @@ import io from "socket.io-client";
 
 import { SocketContext,socket } from './context/socket.js'
 
+
+import { LocalStreamProvider } from './context/localStreamInstanace.jsx'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId='1099245047006-lbgjpha95bfkeso2mjjcpoa9fa76rb3n.apps.googleusercontent.com'>
-     
+     <LocalStreamProvider >
       <SocketContext.Provider value={socket}>
     <Provider store={store}>
       <ThemeProvider >
@@ -24,7 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </ThemeProvider > 
     </Provider>
     </SocketContext.Provider>
- 
+    </LocalStreamProvider>
     </GoogleOAuthProvider>
     
   </React.StrictMode>,

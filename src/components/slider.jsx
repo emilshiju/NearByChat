@@ -69,14 +69,14 @@ export default function CustomMarks() {
           onClick={() => setVal(MIN)}
           sx={{ cursor: 'pointer' }}
         >
-          {MIN} min
+          {MIN} Km
         </Typography>
         <Typography
           variant="body2"
           onClick={() => setVal(MAX)}
           sx={{ cursor: 'pointer' }}
         >
-          {MAX} max
+          {val} Km
         </Typography>
       </Box>
     </Box>

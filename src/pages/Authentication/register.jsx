@@ -28,7 +28,7 @@ import {
   import { ToastContainer, toast, Slide } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 
-  import { useState } from "react";
+  import { useEffect, useState ,useRef} from "react";
   import { Link } from "react-router-dom";
   import { useDispatch, useSelector } from 'react-redux';
   import { setUserCredential,removeUserCredential } from "../../store/authSlice";
@@ -37,18 +37,27 @@ import {
   import { GoogleLogin } from '@react-oauth/google'
   import { jwtDecode } from "jwt-decode";
 
+ import { otpSend, verifyOtp } from '../../service/otp';
+
   const Register = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+
     const showToastMessage = () => {
-    toast.success("Success registered !", {
+      
+     
+    toast.error("Otp Not correct!", {
       position: "top-right",
       autoClose: 1000,
-      onClose: () => navigate('/'),
+      
     })
+   
+
+
   };
+  
   const errorToastMessage=(message)=>{
   
     toast.error(message,{
@@ -81,7 +90,10 @@ import {
   
     const [selectedDate, setSelectedDate] = useState();
     const [dateBox, setDateBox] = useState(false);
-  
+    
+
+    const [otp,setOtp]=useState(false)
+
     const nameValidation = (e)=> {
       const value = e.target.value;
       setName(value);
@@ -210,8 +222,152 @@ import {
       setGenderBox(false)
       return true
      }
+    
+     const [digits, setDigits] = useState(['', '', '', '']); // Initialize state for four digits
+     const inputRefNext = useRef([]);
+     // Handler to update digit based on index
+     const onSetDigit = (e, index) => {
+       const newDigits = [...digits];
+       let value=e.target.value;
+       newDigits[index] = value
+       setDigits(newDigits);
+       if (value && index < inputRefNext.current.length - 1) {
+        inputRefNext.current[index + 1].focus();
+      }
+     };
+
+      
+
+     const afterOtpSubmit=()=>{
 
      
+
+      let otp=digits.join('')
+
+      if(otp.length==0){
+        errorToastMessage("ENTER OTP")
+        return 
+      }
+     
+     
+      verifyOtp(email,otp)
+      .then((status)=>{
+    
+        setDigits(['', '', '', ''])
+
+        if(status)
+          {
+
+             api.post('/register',{
+                userName:name,
+                dob:selectedDate,
+                gender:gender,
+                email:email,
+                password:password
+             })
+             .then((response)=>{
+      
+          
+              if(response.status==200){
+                     
+        
+              dispatch(setUserCredential({user:response.data.data,accestoken:response.data.Accesstoken}))
+             
+
+            
+          }
+        
+
+        
+      })
+      .catch((error)=>{
+        console.log("errrorrrrrrr")
+        console.log(error)
+        
+        
+      })
+
+
+
+          }else{
+      
+            showToastMessage()
+          }
+      })
+
+
+     
+
+
+     }
+
+     
+
+     
+    //  const [timer, setTimer] = useState(null);
+     const [resendOtp,setResendOtp]=useState(false)
+      const  timeRef =useRef(null)
+     
+
+     const [timeLeft, setTimeLeft] = useState(60); // 60 seconds countdown
+
+     
+     useEffect(() => {
+
+
+      // Cleanup interval on component unmount
+      return () => {
+        if (timeRef.current) {
+          clearInterval(timeRef.current);
+        }
+      };
+    }, []);
+  
+       
+
+     
+
+     const sendOtpmessage=()=>{
+      
+      otpSend(email)
+      setResendOtp(false)
+      setTimeLeft(60); 
+
+  
+      // if(timeRef.current){
+      //   clearInterval(timeRef.current)
+      // }
+ 
+     
+       
+    
+     const a= setInterval(() => {
+     
+      if(timeLeft>0){
+      setTimeLeft((prevTime) => prevTime - 1);
+      }else{
+        clearInterval(timeRef.current)
+      }
+    }, 1000);
+    timeRef.current=a
+
+
+        
+      
+
+     }
+
+     
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setResendOtp(true);
+     
+      
+    }
+
+    // return () => clearInterval(timeRef.current); // Cleanup the interval on component unmount
+  }, [timeLeft]);
+
 
   
     const handleSubmit=(e)=>{
@@ -228,45 +384,15 @@ import {
       
   
       if(nameCheck&&emailCheck&&passwordCheck&&cPasswordCheck&&dobCheck&&genderCheck){
-       
-          console.log(selectedDate.$d)
-          console.log(gender)
-          console.log(email)
-          console.log(password)
-          
-        api.post('http://localhost:5000/register',{
-          userName:name,
-          dob:selectedDate,
-          gender,
-          email,
-          password
-        })
-        .then((response)=>{
-        
-          
-            if(response.status==200){
-              dispatch(setUserCredential({user:response.data.data,accestoken:response.data.Accesstoken}))
-              showToastMessage()
-
-              
-            }
-          
-
-          
-        })
-        .catch((error)=>{
-          console.log("errrorrrrrrr")
-          console.log(error)
-          
-          
-        })
-
-        alert("had")
+           setOtp(true)
+        sendOtpmessage()
+         
        
       }
      
   
     }
+
 
     const handleGoogleLogin=()=>{
 
@@ -310,8 +436,9 @@ import {
         let response=await api.post('/googleLogin',{email,idToken,username})
           
         if(response.status==200){
+          // showToastMessage()
           dispatch(setUserCredential({user:response.data.data,accestoken:response.data.Accesstoken}))
-          showToastMessage()
+          
 
           
         }
@@ -328,11 +455,19 @@ import {
       errorToastMessage(error)
   };
 
+
+ 
+
+
   
     return (
       <>
-        <form>
-        <ToastContainer />
+
+<ToastContainer />
+     
+            {!otp&&<div>
+         <form>
+     
           <Container maxWidth="xs">
             <CssBaseline />
             <Box
@@ -544,49 +679,88 @@ import {
           </Container>
           
         </form>
-                {/* <Button>Register</Button> */}
-               
-                {/* <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"  onClick={handleGoogleLogin}>
-                  <span>
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#clip0_191_13499)">
-                        <path
-                          d="M19.999 10.2217C20.0111 9.53428 19.9387 8.84788 19.7834 8.17737H10.2031V11.8884H15.8266C15.7201 12.5391 15.4804 13.162 15.1219 13.7195C14.7634 14.2771 14.2935 14.7578 13.7405 15.1328L13.7209 15.2571L16.7502 17.5568L16.96 17.5774C18.8873 15.8329 19.9986 13.2661 19.9986 10.2217"
-                          fill="#4285F4"
-                        />
-                        <path
-                          d="M10.2055 19.9999C12.9605 19.9999 15.2734 19.111 16.9629 17.5777L13.7429 15.1331C12.8813 15.7221 11.7248 16.1333 10.2055 16.1333C8.91513 16.1259 7.65991 15.7205 6.61791 14.9745C5.57592 14.2286 4.80007 13.1801 4.40044 11.9777L4.28085 11.9877L1.13101 14.3765L1.08984 14.4887C1.93817 16.1456 3.24007 17.5386 4.84997 18.5118C6.45987 19.4851 8.31429 20.0004 10.2059 19.9999"
-                          fill="#34A853"
-                        />
-                        <path
-                          d="M4.39899 11.9777C4.1758 11.3411 4.06063 10.673 4.05807 9.99996C4.06218 9.32799 4.1731 8.66075 4.38684 8.02225L4.38115 7.88968L1.19269 5.4624L1.0884 5.51101C0.372763 6.90343 0 8.4408 0 9.99987C0 11.5589 0.372763 13.0963 1.0884 14.4887L4.39899 11.9777Z"
-                          fill="#FBBC05"
-                        />
-                        <path
-                          d="M10.2059 3.86663C11.668 3.84438 13.0822 4.37803 14.1515 5.35558L17.0313 2.59996C15.1843 0.901848 12.7383 -0.0298855 10.2059 -3.6784e-05C8.31431 -0.000477834 6.4599 0.514732 4.85001 1.48798C3.24011 2.46124 1.9382 3.85416 1.08984 5.51101L4.38946 8.02225C4.79303 6.82005 5.57145 5.77231 6.61498 5.02675C7.65851 4.28118 8.9145 3.87541 10.2059 3.86663Z"
-                          fill="#EB4335"
-                        />
-                      </g>
-                    </svg>
-                  </span>
-                  Sign in with Google
-                </button> */}
-  
-                {/* <Grid container justifyContent="flex-end"> */}
+                
   
                 <div className="mt-6 text-center">
                   <p>have any account?  <Link to='/login' style={{ color:'blue'}}>LOGIN</Link> </p>
                 </div>
-                {/* <Grid item>
-                  <Link to="/login">Already have an account? Login</Link>
-                </Grid> */}
-                {/* </Grid> */}
+             </div> }
+
+                
+                {otp&&  <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
+      <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+        <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
+          <div className="flex flex-col items-center justify-center text-center space-y-2">
+            <div className="font-semibold text-3xl">
+              <p>Email Verification</p>
+            </div>
+            <div className="flex flex-row text-sm font-medium text-gray-400">
+              <p>{`We have sent a code to your email ${email}`}</p>
+            </div>
+          </div>
+
+          <div>
+          
+              <div className="flex flex-col space-y-16">
+                <div className="flex flex-row items-center justify-between mx-auto w-full max-w-xs">
+                  
+                  
+                {digits.map((digit, index) => (
+          <div className="w-16 h-16" key={index}>
+            <input
+             ref={(el) => (inputRefNext.current[index] = el)}
+              className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+              type="text"
+              value={digit}
+              onChange={(e) => onSetDigit(e, index)} // Pass index to identify which digit to update
+            />
+          </div>
+        ))}
+
+
+                </div>
+
+                <div className="flex flex-col space-y-5">
+                  <div>
+                    <button className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm"
+                    onClick={afterOtpSubmit}
+                    >
+                      Verify Account
+                    </button>
+                  </div>
+           
+                  <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
+                    {/* <p>Didn't receive code?</p> */}
+                    {resendOtp&&
+                    <p
+                      className="flex flex-row items-center text-blue-600"
+                   
+                      onClick={sendOtpmessage}
+                    >
+                      Resend
+                    </p>
+                   }
+                    {!resendOtp&&
+                    <p
+                      className="flex flex-row items-center text-blue-600"
+                   
+                    
+                    >
+                     {timeLeft}
+                    </p>
+                   }
+                  </div>
+                </div>
+              </div>
+   
+          </div>
+        </div>
+      </div>
+    </div>}
+                
+  
+            
+      
            
       </>
     );

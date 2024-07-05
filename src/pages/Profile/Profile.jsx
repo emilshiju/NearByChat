@@ -3,16 +3,22 @@ import SideBar from "../../components/sideBar";
 import UploadImage from "../../service/cloudinaryService";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect,useContext } from "react";
 import getProfile from "../../service/getProfile";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
+import NewMessageNotificatoin from "../../components/messageNotification";
+import { SocketContext } from "../../context/socket";
 
 const Profile = () => {
+
+  const socket=useContext(SocketContext)
+
+
   const userInfo = useSelector((state) => state.auth.userInfo);
   const userName = useSelector((state) => state.auth.userInfo.userName);
   const userId = userInfo._id;
-
+  
   const navigate = useNavigate();
 
   const [nickName, setNickName] = useState(userName);
@@ -32,7 +38,7 @@ const Profile = () => {
 
           setProfession(res.response.profession);
 
-          setImage(res.response.imageUrl?res.response.imageUrl:'https://res.cloudinary.com/dwqtoz0ig/image/upload/v1717488014/nearbychat/gsu4hmgkwyy286tmq1wp.png')
+          setImage(res.response.imageUrl)
         }else{
           setImage('https://res.cloudinary.com/dwqtoz0ig/image/upload/v1717488014/nearbychat/gsu4hmgkwyy286tmq1wp.png')
         }
@@ -60,8 +66,26 @@ const Profile = () => {
     navigate("/editProfile");
   };
 
+
+  const [newMessage,setNewMessage]=useState(null)
+
+ 
+  useEffect(()=>{
+    socket.on('newMessageNotification',(response)=>{
+      
+      setNewMessage(response)
+    })
+
+    return ()=>{
+      socket.off('newMessageNotification')
+    }
+  })
+
+
+
   return (
     <div class="component-background-black">
+      {newMessage&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
       <SideBar />
 
       <br></br>

@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import "./Home.css";
 
 import SideBar from "../components/sideBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomMarks from "../components/slider";
 import { ThemeContext } from "../context/createContext";
 import { useContext } from "react";
@@ -16,7 +16,7 @@ import Box from "@mui/material/Box";
 import profileForm, { updateImageUrl } from "../service/profileForm";
 import LocationPinAnimation from "../components/locationpinAnimation";
 import locationPinAnimation from '../../locationPinAnimation.json';
-
+import NewMessageNotificatoin from "../components/messageNotification";
 import Map, {
   GeolocateControl,
   Marker,
@@ -38,6 +38,11 @@ import { SocketContext } from "../context/socket";
 let accessToken =
   "pk.eyJ1IjoiZW1pbGxzaGlqdSIsImEiOiJjbHdkcXQwcXMwN2oyMmlxanpxeHV0MnpvIn0.RNUnWz60Xtvl26z65jOISw";
 const Home = () => {
+
+  const {status}=useParams()
+
+  
+  
   const userInfo = useSelector((state) => state.auth.userInfo);
   const { value } = useContext(ThemeContext);
   const socket=useContext(SocketContext)
@@ -64,6 +69,8 @@ const Home = () => {
   //   return () => clearTimeout(timer);  
   // }, []);
   useEffect(()=>{
+    
+
     socket.emit('on',userInfo._id)
 
     return ()=>{
@@ -104,7 +111,14 @@ const Home = () => {
       const location = { latitude, longitude };
       setuserCoordinates({longitude,latitude})
 
-      api.post('/saveLocation',{longitude,latitude,userId})
+      if(status){
+       
+     
+        api.post('/saveLocation',{longitude,latitude,userId})
+      }
+      
+
+      
       
 
       // socket.emit("locationUpdate", location, userId, value);
@@ -233,11 +247,19 @@ const Home = () => {
                 longitude: i.location.coordinates[0],
                 latitude: i.location.coordinates[1],
                 id: i.userId,
-                imageUrl: i.profileDetails[0].imageUrl,
+                imageUrl: i.userDetails.imageUrl,
               });
             }
-    
+         
+           if(location.length==0){
+            Swal.fire({
+              title: "No One is there ",
+              text: "Try after some time?",
+              icon: "error"
+            });
+           }else{
             setUsers(location);
+           }
             // setPlayAnimation(false)
             console.log("am location am locaiton am locaiotn ");
             
@@ -245,8 +267,7 @@ const Home = () => {
             
           })
           .catch((err)=>{
-            alert("ivide aneyi")
-            alert(err)
+           console.log("error")
           })
         
     
@@ -356,9 +377,31 @@ const Home = () => {
       }, 1000);
     }
   }, [playAnimation]);
+
+
+
+
+const [newMessage,setNewMessage]=useState(null)
+
+ 
+  useEffect(()=>{
+    socket.on('newMessageNotification',(response)=>{
+     
+      setNewMessage(response)
+    })
+
+    return ()=>{
+      socket.off('newMessageNotification')
+    }
+  })
+
+
+
+
   
   return (
     <div style={{position:"relative"}}>
+     {newMessage&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
       {notification&&<Notification   message={notification} onClose={closeNotification}  />}
       {playAnimation && (
         <div
