@@ -417,7 +417,7 @@ useEffect(() => {
 
 
     const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB limit
-    alert(file.size)
+    
     if (file.size > maxSizeInBytes) {
         alert("File size exceeds the limit (1 MB). Please select a smaller file.");
         // Optionally, reset the file input to clear the selected file
