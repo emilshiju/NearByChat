@@ -71,9 +71,12 @@ alert("error in intercetor")
 if(error.response.status === 402){
   alert(error.response.data.message)
 }
-alert(error.response.status)
+
     
     const originalRequest = error.config;
+    console.log("orginalllllllllllllllll rquestttttttttttttttttttttttttttttttttttt")
+    console.log(originalRequest)
+    console.log("stoppppppppppppppppppppppppppppppppp")
     
     if(error.response.status === 403){
       alert("account blocked")

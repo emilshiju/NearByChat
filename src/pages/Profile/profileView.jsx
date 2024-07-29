@@ -4,13 +4,15 @@ import Sidebar from '../../components/sideBar';
 import { FaSpinner } from "react-icons/fa";
 import getProfile from "../../service/getProfile";
 import connection from "../../service/connection"
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 // import { Socket } from 'socket.io-client';
 // import { socket } from '../../main';
 import Notification from '../../components/notification';
 import { SocketContext } from "../../context/socket";
 import api from '../../route/interceptors';
 import NewMessageNotificatoin from '../../components/messageNotification';
+import { removeUserCredential } from '../../store/authSlice';
+
 
 const profileView=()=>{
     const { receiverId } = useParams();
@@ -18,6 +20,7 @@ const profileView=()=>{
     const socket=useContext(SocketContext)
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
 
     const [nickName,setNickName]=useState('name')
@@ -27,6 +30,23 @@ const profileView=()=>{
     const [userProfileId,setUserProfile]=useState(null)
     const [receiverProfileId,setReceiverId]=useState(null)
     const [userStatus,setUserStatus]=useState(false)
+
+
+
+
+    useEffect(()=>{
+      socket.on('blockedUser',()=>{
+        alert('Your account has been blocked.');
+        dispatch(removeUserCredential());
+       
+        navigate('/login');
+      })
+  
+      return ()=>{
+        socket.off('blockedUser')
+      }
+  
+    })
 
 
 
@@ -162,7 +182,7 @@ const profileView=()=>{
     return(
         <div>
          {newMessage&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
-             <Sidebar />
+             <Sidebar   current='profileView' />
              {notification&&<Notification   message={notification} onClose={closeNotification}  />}
              <main
         className="bg-gray-100 bg-opacity-25"

@@ -2,13 +2,14 @@ import ImageEditor from "../../components/ImageEditor";
 import SideBar from "../../components/sideBar";
 import UploadImage from "../../service/cloudinaryService";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useEffect,useContext } from "react";
 import getProfile from "../../service/getProfile";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import NewMessageNotificatoin from "../../components/messageNotification";
 import { SocketContext } from "../../context/socket";
+import { removeUserCredential } from "../../store/authSlice";
 
 const Profile = () => {
 
@@ -20,6 +21,7 @@ const Profile = () => {
   const userId = userInfo._id;
   
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [nickName, setNickName] = useState(userName);
   const [profession, setProfession] = useState("profession");
@@ -82,11 +84,26 @@ const Profile = () => {
   })
 
 
+  useEffect(()=>{
+    socket.on('blockedUser',()=>{
+      alert('Your account has been blocked.');
+      dispatch(removeUserCredential());
+     
+      navigate('/login');
+    })
+
+    return ()=>{
+      socket.off('blockedUser')
+    }
+
+  })
+
+
 
   return (
     <div class="component-background-black">
-      {newMessage&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
-      <SideBar />
+      {newMessage&&!newMessage.currentStatus&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
+      <SideBar current='Profile' />
 
       <br></br>
 
@@ -178,7 +195,10 @@ const Profile = () => {
 
           <br></br>
 
-          <div className="px-px md:px-3">
+
+
+
+          {/* <div className="px-px md:px-3">
             {" "}
             <ul className="flex md:hidden justify-around space-x-8 border-t text-center p-2 text-gray-600 leading-snug text-sm">
               <li>
@@ -323,7 +343,14 @@ const Profile = () => {
                 </a>
               </div>
             </div>
-          </div>
+          </div> */}
+
+
+
+
+
+
+
         </div>
       </main>
     </div>

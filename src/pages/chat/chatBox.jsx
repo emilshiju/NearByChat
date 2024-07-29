@@ -2,7 +2,7 @@
 
 
 import React,{useState,useEffect,useCallback,useContext,useRef} from "react";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 
 import { SocketContext } from "../../context/socket";
 import { useParams ,useNavigate } from 'react-router-dom';
@@ -19,18 +19,18 @@ import ImageCropper from "../../components/ImageCropper";
 import SharePicChat from "../../service/sharePic_Chat";
 import ReportManagement from "../../components/Report";
 import Notification from "../../components/notification";
-import deleteChat, { deleteAllMessage } from "../../service/deleteChat";
+import deleteChat, { deleteAllMessage, deleteSingleChat } from "../../service/deleteChat";
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import NewMessageNotificatoin from "../../components/messageNotification";
 
 import Picker from 'emoji-picker-react';
-
+import { removeUserCredential } from "../../store/authSlice";
 
 import Swal from 'sweetalert2';
-
-
+import { userTouserBlock } from "../../service/deleteChat";
+import { userTouserUnblock } from "../../service/deleteChat";
 
 
   function isURL(str) {
@@ -48,6 +48,7 @@ import Swal from 'sweetalert2';
 
 
 const ChatBox=()=>{
+  const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state.auth.userInfo);
   const  userId=userInfo._id
@@ -62,12 +63,26 @@ const { receiverId }=useParams()
   const [image, setImage] = useState(false);
   const [oppositeOne,setOppositeOne]=useState()
 
+
+  const [blockUnblockchatroomId,setblockUnblockchatroomId]=useState(null)
+  
+  const [chatroomDetails,setchatroomDetails]=useState()
+
   const [chatRoomId,setChatRoomId]=useState(false)
 
   const [messages, setMessages] = useState([]);
 
   const [sideMessage,setSideMessage]=useState()
   const messageContainerRef = useRef(null);
+
+
+  // function getAll(){
+  //   getAllConversation(userId)
+  //   .then((res)=>{
+  //     setSideMessage(res)
+  //   })
+  // }
+
 
 
   useEffect(()=>{
@@ -79,6 +94,15 @@ const { receiverId }=useParams()
 
   
   },[messages])
+
+  
+  
+
+  useEffect(()=>{
+    return ()=>{
+      socket.off('deletedStaus')
+    }
+  })
 
 
 
@@ -130,15 +154,33 @@ if(receiverId){
       setMessages( array);
       }
      
+
+
       setOppositeOne(resposne.data.profile)
+
+      const member = resposne.data.chatroom?.members?.find(a => userId === a.userId);
+      {console.log(resposne.data.chatroom)}
+      console.log("================================================================================================")
+      console.log(member)
+      setblockUnblockchatroomId(resposne.data.chatroom._id)
+      setchatroomDetails(member)
+      if(member.status==true){
+        
+        setSendMessaeInputBox('none')
+      }else{
+        setSendMessaeInputBox('false')
+      }
+      
     })
   }
 }
 
 
-  socket.on('deletedStatus',()=>{
-    updateSingleChat()
-  })
+
+
+
+
+ 
 
 const [permissionForVideoCall,setPermissionForVideoCall]=useState(false)
 const [localId,setLocalId]=useState()
@@ -158,7 +200,12 @@ const [oppositeOneTypingStatus,setOpositeOneTypingStatus]=useState(false)
       
 
       // setComingMessages(prevMessages => [...prevMessages,response.message]);
-      setMessages(prevMessages => [...prevMessages, response]);
+      console.log("nw messssssssssageeeeeeeeeeeeeeeeeeeeeeee")
+      console.log(chatroomDetails)
+    
+        setMessages(prevMessages => [...prevMessages, response]);
+      
+
     })
     updateSingleChat()
 
@@ -182,7 +229,20 @@ const [oppositeOneTypingStatus,setOpositeOneTypingStatus]=useState(false)
       setVideoCall(false)
     })
 
+
+    socket.on('deletedStatus',()=>{
+    
+      updateSingleChat()
+    })
+
+    
+
     return ()=>{
+      socket.off('on')
+      socket.off('deletedStatus')
+      socket.off('skingPermisionVideoCall')
+      socket.off('ypingStatus')
+      socket.off('ignoredStatus')
       socket.off('newMessage')
     }
 
@@ -213,7 +273,7 @@ const [oppositeOneTypingStatus,setOpositeOneTypingStatus]=useState(false)
       setTimeout(() => {
         socket.emit('isTypingStatus',receiverId,false)
         setIsTyping(false);
-      }, 4000)
+      }, 2000)
     );
 
 
@@ -270,6 +330,8 @@ const [oppositeOneTypingStatus,setOpositeOneTypingStatus]=useState(false)
     
 
   }
+  {console.log("chatromooooooooooommmmmmmmmmmmmmmmmmmmmmmm detailsssssssssssssssssssssssssssssssssssssssssssssssssss")}
+  {console.log(chatroomDetails)}
 
   const [isCalling,setIsCalling]=useState(false)
   
@@ -338,6 +400,27 @@ const closePreview=()=>{
   }
  
 }
+
+
+useEffect(()=>{
+  socket.on('blockedUser',()=>{
+    alert('Your account has been blocked.');
+    dispatch(removeUserCredential());
+   
+    navigate('/login');
+  })
+
+  
+
+  return ()=>{
+    setChatRoomId(null)
+    socket.off('blockedUser')
+  }
+
+})
+
+
+
 
 
 useEffect(() => {
@@ -437,7 +520,7 @@ useEffect(() => {
 
   const [reportShow,setReportShow]=useState(false)
 
- const [showsendMessageInputBox,setSendMessaeInputBox]=useState(true)
+ const [showsendMessageInputBox,setSendMessaeInputBox]=useState('false')
   const [option,setOptions]=useState(false)
 
 
@@ -461,9 +544,9 @@ const onChangeSelectMessaeOption=(status)=>{
 
   if(status){
     setSelectMessaeOption(true)
-    setSendMessaeInputBox(false)
+    setSendMessaeInputBox('delete')
   }else{
-    setSendMessaeInputBox(true)
+    setSendMessaeInputBox('false')
     setSelectMessaeOption(false)
   }
  
@@ -484,13 +567,14 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
 
 
   const onSelectUsers=()=>{
-    setSelectUsers(true)
+    setSelectUsers(!selectUsers)
   }
 
 
 
   const allSelectedUsers=(e)=>{
     let val=e.target.value
+  
    
     if(e.target.checked){
       
@@ -502,14 +586,39 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
     }
   
   }
-
+   
+  
 
 
   const deleteSelectedUsers=()=>{
     
 
 
-    deleteChat(selectedUsersId,userId)
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+      
+        setSelectedUsersId([])
+    setSelectUsers(false)
+    deleteSingleChat(selectedUsersId,userId)
+    .then((res)=>{
+      if(res){
+       
+        updateSingleChat()
+        navigate('/chatBox')
+      }
+    })
+
+
+  }})
+  
 
   }
 
@@ -533,8 +642,10 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
           'Cleared!',
           'The chat has been cleared.',
           'success'
-        );
-        updateSingleChat()
+        ).then(()=>{
+          updateSingleChat()
+        })
+       
       }
     
     });
@@ -570,10 +681,11 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-
+     
         socket.emit("deleteMessage",messagesId,userId,receiverId)
         setSelectMessaeOption(false)
-        setSendMessaeInputBox(true)
+        setSendMessaeInputBox('false')
+        setMessagesId([])
 
         // deleteAllMessage(messagesId)
         // .then((res) => {
@@ -595,8 +707,12 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
 
 
   const[showEmoji,setShowEmoji]=useState(false)
+
   const onChageshowemoji=()=>{
-    setShowEmoji(!showEmoji)
+
+   
+    setShowEmoji(true)
+    // setShowEmoji(!showEmoji)
     
   }
 
@@ -624,6 +740,44 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
   setSendButton(true)
     
   };
+
+
+
+   // handle opppostie user blocking
+  const onChangeBlockUser=(chatRoomId,userId)=>{
+
+  
+
+   
+    userTouserBlock(chatRoomId,userId)
+    .then((res)=>{
+      updateSingleChat()
+    })
+
+
+   
+
+    setOptions(false)
+
+ 
+  }
+
+
+  const member = chatroomDetails?.members?.find(a => userId === a.userId);
+console.log("111111111111111111111111111111111111             2222222222222222222222      current user chatroom details details chatroomdetails details ")
+  console.log(chatroomDetails)
+
+
+
+  const unBlockUser=(chatRoomId,userId)=>{
+
+   
+
+     userTouserUnblock(chatRoomId,userId)
+      .then((res)=>{
+        updateSingleChat()
+      })
+  }
 
   
   return (
@@ -653,11 +807,24 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
             </div>
             <div className="flex">
                
-                <div className="ml-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" >
+          {selectUsers&&<><svg xmlns="http://www.w3.org/2000/svg"      style={{ cursor:selectedUsersId.length > 0 ? 'pointer' : 'not-allowed' }}   viewBox="0 0 24 24" width="24" height="24" fill="currentColor" onClick={deleteSelectedUsers}>
+  <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/>
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" onClick={onSelectUsers}>
+  <path d="M18.3 5.71L12 12l6.3 6.3-1.42 1.42L12 14.41l-6.3 6.3-1.42-1.42L10.59 12 4.29 5.71 5.71 4.29 12 10.59l6.3-6.3z"/>
+</svg>
+</>}
+
+
+
+
+               {!selectUsers&&<div className="ml-4">
+                  
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" widh="24" height="24" onClick={onSelectUsers} >
                         <path fill="#263238" fillOpacity=".6" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path>
                     </svg>
-                </div>
+                </div>}
             </div>
         </div>
      
@@ -688,7 +855,7 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
 
 
 
-{selectedUsersId.length>0&& <div
+{/* {selectedUsersId.length>0&& <div
             
             className="flex items-center p-3 text-sm font-medium text-red-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:text-red-500 hover:underline"
             onClick={deleteSelectedUsers}
@@ -704,12 +871,14 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
               <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z" />
             </svg>
             Delete user
-          </div>}
+          </div>} */}
 
 
 
 
 <div className="bg-grey-lighter flex-1 overflow-auto">
+  {console.log("side message message sidemesasge sidemssage")}
+  {console.log(sideMessage)}
   {sideMessage&&sideMessage.map((msg, index) => {
        let time=msg?.all?.timeStamp
       
@@ -728,7 +897,7 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
           {selectUsers&&  <input
                   id="checkbox-item-11"
                   type="checkbox"
-                  value={msg?._id}
+                  value={msg?.all?.chatroom}
                   onChange={allSelectedUsers}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                 />}
@@ -737,10 +906,22 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
         </div>
         <div className="ml-4 flex-1 border-b border-grey-lighter py-4" onClick={()=>handleClick(id)}>
           <div className="flex items-bottom justify-between">
+
             <p className="text-grey-darkest">{msg?.userDetails?.nickName}</p>
             <p className="text-xs text-grey-darkest">{formattedTime?formattedTime:""}</p>
+            
           </div>
-       
+          
+          {/* <div className="flex items-center justify-end">
+          
+    {!msg?.all?.isRead && <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+  <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM7.293 9.293a1 1 0 0 1 1.414 0l2 2a1 1 0 1 1-1.414 1.414l-2-2a1 1 0 0 1 0-1.414zm5.414-3.586a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414l1.293 1.293 3-3z"/>
+</svg>
+}
+  </div> */}
+
+
+         {/* {!msg?.all?.isRead&&<p>notRead</p>}</div> */}
 
           {msg?.all?.receiver==userId&&isURL(msg?.all?.message)&&
           
@@ -795,8 +976,8 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
       <span className="mb-1 text-sm  text-black  " onClick={()=>onChangeSelectMessaeOption(true)} >select message</span>
                 <br/>
                 <span className="mb-1 text-sm  text-black  " onClick={()=>setReportShow(true)} >report</span>
-      
-
+                <br></br>
+                <span  className="mb-1 text-sm  text-black  " onClick={()=>onChangeBlockUser(blockUnblockchatroomId,userId)}>block</span>
             </div>
             
             
@@ -957,7 +1138,19 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
 
 
 
-    {!showsendMessageInputBox && (
+
+
+ {/* message input send box */}
+
+
+ {console.log("chatrooomm details chatroom details chatroom details chatroom details chatrooom detials chatroom details")}
+ {console.log(chatroomDetails)}
+ 
+
+<div>
+
+
+    {showsendMessageInputBox=='delete' && (
                 <div className="bg-white border border-gray-200 rounded-md shadow-md flex items-center justify-between px-3 py-2" style={{ width: "300px", height: "40px" }}>
                     <div className="pl-4">
                         <svg
@@ -990,17 +1183,19 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
 
 
 
-{/* {showEmoji&&<div className="w-72 h-96 absolute mt-64 ">  
-      <Picker  />
-    </div>} */}
 
+{console.log("current emojiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")}
+{console.log(showEmoji)}
 
     {showEmoji && (
-        <div className="w-72 h-96 absolute mt-40 ">
-          <div className="relative">
+     
+        <div >
+       
+          <div className="absolute z-50 top-32 left-0 ">
+
             <button
           
-              className="absolute top-2 pr-2  z-40 "
+              className=" pr-2  z-50 "
               onClick={() => setShowEmoji(false)}
           
             >
@@ -1015,27 +1210,30 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            // onClick={() => onChangeSelectMessaeOption(false)}
+                           
                         >
                             <path d="m1 1 12 12M1 13 13 1" />
                         </svg>
                     </div>
             </button>
+
             <br></br>
             <br></br>
             <Picker  onEmojiClick={onEmojiClick} />
           </div>
         </div>
+      
+
       )}
 
       
 
-    {showsendMessageInputBox&&<div className="bg-gray-300 px-4 py-4 flex items-center">
+    {showsendMessageInputBox=='false'&&<div className="bg-gray-300 px-4 py-4 flex items-center">
       
     <div style={{display: "flex" ,gap:" 16px"}}>
     
-    {/* <Picker onEmojiClick={onEmojiClick} /> */}
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" onClick={setShowEmoji}>
+   
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" onClick={onChageshowemoji}>
         <path opacity=".45" fill="#263238" d="M9.153 11.603c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962zm-3.204 1.362c-.026-.307-.131 5.218 6.063 5.551 6.066-.25 6.066-5.551 6.066-5.551-6.078 1.416-12.129 0-12.129 0zm11.363 1.108s-.669 1.959-5.051 1.959c-3.505 0-5.388-1.164-5.607-1.959 0 0 5.912 1.055 10.658 0zM11.804 1.011C5.609 1.011.978 6.033.978 12.228s4.826 10.761 11.021 10.761S23.02 18.423 23.02 12.228c.001-6.195-5.021-11.217-11.216-11.217zM12 21.354c-5.273 0-9.381-3.886-9.381-9.159s3.942-9.548 9.215-9.548 9.548 4.275 9.548 9.548c-.001 5.272-4.109 9.159-9.382 9.159zm3.108-9.751c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962z"/>
     </svg>
     <div >
@@ -1077,8 +1275,18 @@ const [selectedUsersId,setSelectedUsersId]=useState([])
     </div>}
 
 </div> 
+
+{chatroomDetails?.status==true&&<button  onClick={()=>unBlockUser(blockUnblockchatroomId,userId)} className="bg-white border-gray-200 rounded-md shadow-md flex items-center justify-center px-3 py-2">UN BLOCK</button>}
+
+
+</div>
+
 }
  
+
+ 
+
+
 
 
 

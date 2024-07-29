@@ -11,3 +11,17 @@ export const ThemeProvider = ({ children }) => {
       </ThemeContext.Provider>
     );
   };
+
+
+
+export const SideBarContext=createContext('')
+
+  export const SideBar=({children})=>{
+    const [open, setOpen] = useState(true);
+
+    return (
+      <SideBarContext.Provider value={{open,setOpen}} >
+      {children}
+      </SideBarContext.Provider>
+    )
+  }

@@ -16,6 +16,14 @@ import NotificationList from "../src/pages/Notification/notificationList"
 import ChatBox from "../src/pages/chat/chatBox"
 import VideoCall from "./components/videoCall/videoCall"
 import PermissionNotification from "./components/permisionNotification"
+import ChatRandom from "./pages/chatToRandomPepoles/chatRandom"
+import ConnectingToRandomPepole from "./components/connectingToRandomPepole"
+import ChatToRandomPepoles from "./components/chatToRandomPepoles"
+import Settings from "./pages/settings/settings"
+import EditUserDetails from "./pages/settings/editUserDetails"
+import ForgotPassword from "./pages/settings/forgotPassword"
+import OrderSummary from "./pages/settings/orderSummary"
+
 const router=createBrowserRouter([
    
     {
@@ -53,7 +61,8 @@ const router=createBrowserRouter([
     },
     {
         path:"/chatBox/:receiverId?",
-        element:(<ChatBox />)
+        element:(<ChatBox />),
+        
     },
     {
         path:'/videoCall/:status?',
@@ -62,6 +71,33 @@ const router=createBrowserRouter([
     {
         path:'/permission',
         element:(<PermissionNotification />)
+    },{
+        path:"/chatRandom",
+        element:(<ChatRandom  />)
+    },
+    {
+        path:"/connectingRandomPepole",
+        element:(<ConnectingToRandomPepole  />)
+    },
+    {
+        path:"/chatToRandomPepole",
+        element:(<ChatToRandomPepoles  />)
+    }
+    ,{
+        path:"/settings",
+        element:(<Settings />)
+    },
+    {
+        path:"/editUserDetails",
+        element:(<EditUserDetails  />)
+    },
+    {
+        path:"/forgotPassword",
+        element:(<ForgotPassword  />)
+    },
+    {
+        path:"/orderSummary",
+        element:(<OrderSummary  />)
     }
 ])
 

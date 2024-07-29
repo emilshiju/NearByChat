@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useContext} from "react";
 import Menus from "../lib/sideBar"
 import ViewSidebarRoundedIcon from '@mui/icons-material/ViewSidebarRounded';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -10,9 +10,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { removeUserCredential } from "../store/authSlice";
 import { useDispatch} from 'react-redux';
 
-const Sidebar = () => {
-  const [open, setOpen] = useState(true);
+import { SideBarContext } from "../context/createContext";
+
+const Sidebar = ({current}) => {
+  // const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
+  const {open,setOpen}=useContext(SideBarContext)
+
+  const [screenHeight,setScreenHeight]=useState()
+  const [screenWidth,setScreenWidht]=useState()
+
     
 
   const navigate = useNavigate();
@@ -24,6 +31,27 @@ const Sidebar = () => {
     navigate('/login')
     
   }
+
+
+  const screenwidth = window.screen.width;
+const screenheight = window.screen.height;
+// setScreenHeight(screenheight)
+// setScreenWidht(screenwidth)
+
+
+if(screenwidth==375&&screenheight==667){
+
+  setOpen(false)
+console.log("=====================================================")
+}
+
+console.log(`Screen width: ${screenwidth}px`);
+console.log(`Screen height: ${screenheight}px`);
+
+
+  
+
+
 
   return (
     <div className="flex  ">
@@ -68,9 +96,10 @@ const Sidebar = () => {
              <Link to={Menu.link} className="flex items-center gap-x-4 w-full">
                <Menu.icon />
                
-              <span className={`${!open && "hidden"} origin-left duration-200`}>
+              <span className={`${!open && "hidden"} origin-left duration-200 ${Menu.title==current&& "text-blue-500" }  scale-108 `}>
                 {Menu.title}
               </span>
+
               </Link>
              
             </li>

@@ -35,7 +35,7 @@ const UserProtectedRoute=({ children })=>{
           };
       
           fetchUserStatus();
-    },[])
+    })
    
     
 

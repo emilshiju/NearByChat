@@ -1,8 +1,8 @@
 import SideBar from "../../components/sideBar";
 
 // import { Button, Modal } from "flowbite-react";
-import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef, useState ,useContext} from "react";
+import { useSelector ,useDispatch} from "react-redux";
 
 import UploadImage from "../../service/cloudinaryService";
 import Box from "@mui/material/Box";
@@ -27,14 +27,20 @@ const style = {
 import { FaSpinner } from "react-icons/fa";
 import profileForm, { updateImageUrl } from "../../service/profileForm";
 import getProfile from "../../service/getProfile";
+
+
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { removeUserCredential } from "../../store/authSlice";
 
+import { SocketContext } from "../../context/socket";
 
 const ProfileEditUser = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
+  const dispatch = useDispatch();
   const userId=userInfo._id
+  const socket=useContext(SocketContext)
 
   const [nickName,setNickName]=useState('')
   const [profession,setProfession]=useState('')
@@ -49,6 +55,23 @@ const ProfileEditUser = () => {
       autoClose: 1000,
     })
   };
+
+
+
+  useEffect(()=>{
+    socket.on('blockedUser',()=>{
+      alert('Your account has been blocked.');
+      dispatch(removeUserCredential());
+     
+      navigate('/login');
+    })
+
+    return ()=>{
+      socket.off('blockedUser')
+    }
+
+  })
+
 
 
   useEffect(()=>{
@@ -181,7 +204,7 @@ const ProfileEditUser = () => {
           </div>
         </div>
       )}
-      <SideBar />
+      <SideBar  current='profileEdit' />
 
       {/* <Button onClick={handleOpen}>Open Modal</Button> */}
 

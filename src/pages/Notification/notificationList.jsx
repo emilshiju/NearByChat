@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import api from "../../route/interceptors";
 import connection from "../../service/connection";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch } from "react-redux";
 import Sidebar from "../../components/sideBar";
 import { SocketContext, socket } from "../../context/socket";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../components/notification";
 import { Unconnect } from "../../service/crudConnections";
 import NewMessageNotificatoin from "../../components/messageNotification";
+import { removeUserCredential } from "../../store/authSlice";
+import { SideBarContext } from "../../context/createContext";
+
+
+
 
 const NotificationList = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const [allNotification, setAllNotification] = useState(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
 
   const [notification, setNotification] = useState(null);
 
@@ -54,6 +61,22 @@ const NotificationList = () => {
       socket.off("notification");
     };
   }, []);
+
+  useEffect(()=>{
+    socket.on('blockedUser',()=>{
+      alert('Your account has been blocked.');
+      dispatch(removeUserCredential());
+     
+      navigate('/login');
+    })
+
+    return ()=>{
+      socket.off('blockedUser')
+    }
+
+  })
+
+
 
 
 
@@ -105,16 +128,20 @@ const NotificationList = () => {
   })
 
 
+  const { open , setOpen }=useContext(SideBarContext)
+
+
+
 
   return (
     <div>
-      <Sidebar />
+      <Sidebar   current='Notification' />
       {notification && (
         <Notification message={notification} onClose={closeNotification} />
       )}
       {newMessage&&<NewMessageNotificatoin message={newMessage}   setIsOpen={setNewMessage}   />}
 
-      <div style={{ marginLeft: "387px" }}>
+      <div style={{ marginLeft:open? "387px" :"250px"}}>
         <div
           className="flex flex-col p-8 bg-white shadow-md hover:shadow-lg rounded-2xl"
           style={{ marginTop: "60px", width: "1000px" }}

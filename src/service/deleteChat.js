@@ -3,7 +3,7 @@ import api from "../route/interceptors";
 
 
 const deleteChat=(selectedUserId,userId)=>{
-alert("999")
+
 
 
     return new Promise((resolve,reject)=>{
@@ -28,4 +28,55 @@ return new Promise((resolve,reject)=>{
         }
     })
 })
+}
+
+
+export const deleteSingleChat=(chatRoomId,userId)=>{
+  
+    return new Promise((resolve,reject)=>{
+       
+
+        api.delete('/deleteSingleChat',{data:{chatRoomId,userId}})
+        .then((res)=>{
+          if(res.data.status){
+            resolve(res.data.status)
+          }
+        })
+    })
+}
+
+
+export const userTouserBlock=(chatRoomId,userId)=>{
+
+    return new Promise((resolve,reject)=>{
+      
+        api.patch('/userTouserBlock',{chatRoomId,userId})
+        .then((res)=>{
+            if(res.data.data){
+                resolve(res.data.data)
+            }
+        })
+        
+    })
+}
+
+
+export const userTouserUnblock=(chatRoomId,userId)=>{
+
+    return new Promise((resolve,reject)=>{
+        alert("poi")
+        try{
+
+        api.patch('/userTouserUnblock',{chatRoomId,userId})
+        .then((res)=>{
+            if(res.data.data){
+                resolve(res.data.data)
+            }
+        })
+    }catch(error){
+        console.log("ererror erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+        console.log(error)
+    }
+
+    })
 }

@@ -8,7 +8,7 @@ import CustomMarks from "../components/slider";
 import { ThemeContext } from "../context/createContext";
 import { useContext } from "react";
 import api from "../route/interceptors";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 import Button from "@mui/material/Button";
 import locationIcon from "../assets/location.png";
 import SendIcon from "@mui/icons-material/Send";
@@ -17,12 +17,14 @@ import profileForm, { updateImageUrl } from "../service/profileForm";
 import LocationPinAnimation from "../components/locationpinAnimation";
 import locationPinAnimation from '../../locationPinAnimation.json';
 import NewMessageNotificatoin from "../components/messageNotification";
+
 import Map, {
   GeolocateControl,
   Marker,
   Popup,
   NavigationControl,
 } from "react-map-gl";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 import Swal from "sweetalert2";
 import locationService from "../service/locationService";
@@ -34,17 +36,33 @@ import getProfile from "../service/getProfile";
 // import { socket } from '../main';
 import Notification from "../components/notification";
 import { SocketContext } from "../context/socket";
+import { removeUserCredential } from "../store/authSlice";
+import { regSw,subscribe } from "../serviceWorker";
+// import { messaging ,getToken,onMessage} from "../firebase";
+// import {  getToken ,onMessage,getMessaging} from "firebase/messaging";
 
+import { onBackgroundMessage } from "firebase/messaging/sw";
+import SearchSubscription from "../components/searchSubscription";
 let accessToken =
   "pk.eyJ1IjoiZW1pbGxzaGlqdSIsImEiOiJjbHdkcXQwcXMwN2oyMmlxanpxeHV0MnpvIn0.RNUnWz60Xtvl26z65jOISw";
+
+
+
+
+import { SideBarContext } from "../context/createContext";
+
+
+  
 const Home = () => {
 
   const {status}=useParams()
+  const dispatch = useDispatch();
 
   
   
   const userInfo = useSelector((state) => state.auth.userInfo);
   const { value } = useContext(ThemeContext);
+  const { open , setOpen }=useContext(SideBarContext)
   const socket=useContext(SocketContext)
   const navigate = useNavigate();
 
@@ -100,6 +118,24 @@ const Home = () => {
   }, []);
 
  
+
+  useEffect(()=>{
+
+
+  
+    
+    socket.on('blockedUser',()=>{
+      alert('Your account has been blocked.')
+      dispatch(removeUserCredential());
+      navigate('/login');
+     
+    })
+
+    return ()=>{
+      socket.off("blockedUser")
+    }
+  },[])
+   
   
 
   useEffect(() => {
@@ -199,6 +235,12 @@ const Home = () => {
  
   const [fadeOut, setFadeOut] = useState(false);
 
+
+
+  const [showSearchSubscription,setSearchSubscripton]=useState(null)
+
+
+
   
   const handleSearch = () => {
 
@@ -216,7 +258,10 @@ const Home = () => {
 
       if(res.status){
 
-
+      // handle paid search
+      
+      if(res.response.currSearch<=res.response.maxSearch){
+         
 
         if (value == 0) {
       
@@ -263,7 +308,12 @@ const Home = () => {
             // setPlayAnimation(false)
             console.log("am location am locaiton am locaiotn ");
             
-          
+
+
+
+             // api for increment the currSearc (paid subscrition)
+
+             api.patch('/incrementSearchCount',{id:userInfo._id})
             
           })
           .catch((err)=>{
@@ -273,6 +323,20 @@ const Home = () => {
     
           
         }
+       
+
+      }else{
+
+      
+
+        // handle for paid search 
+        setSearchSubscripton(true)
+      }
+
+
+
+
+
 
 
         
@@ -398,11 +462,275 @@ const [newMessage,setNewMessage]=useState(null)
 
 
 
+//servier worker api 
+
+
+// Handle foreground messages
+
+
+
+// onMessage(messaging, (payload) => {
+//   alert("dsjhfdshf")
+//   console.log('Message received in foreground:', payload);
+//   // Customize the notification here if necessary
+//   const notificationTitle = payload.notification.title;
+//   const notificationOptions = {
+//     body: payload.notification.body,
+//     // icon: payload.notification.icon // Uncomment if you have an icon
+//   };
+  
+ 
+// });
+
+
+
+
+
+const [notificationShow,setShowNotification]=useState()
+
+
+
+useEffect(()=>{
+
+
+const storedSubscriptionJSON = localStorage.getItem('subscription');
+if (storedSubscriptionJSON) {
+
+  
+  const storedSubscription = JSON.parse(storedSubscriptionJSON);
+  console.log(storedSubscription);
+  setShowNotification(true)
+  
+} else {
+  setShowNotification(false)
+  console.log('No subscription found in localStorage');
+}
+
+})
+
+
+  // useEffect(() => {
+  //   if ('serviceWorker' in navigator) {
+  //     navigator.serviceWorker.register('firebase-messaging-sw.js')
+  //       .then((registration) => {
+  //         console.log('Service Worker registered with scope:', registration.scope);
+
+  //         // After service worker is registered, request notification permission
+  //         // requestNotificationPermission();
+  //       }).catch((err) => {
+  //         console.log('Service Worker registration failed:', err);
+  //       });
+  //   }
+  // }, []);
+
+
+
+
+
+  
+  
+  
+
+    const registerAndSubscribe=async()=>{
+
+    
+   
+
+//       try{
+       
+// // const serviceWorkerReg=await regSw()
+// // console.log(serviceWorkerReg)
+
+// let url='/firebase-messaging-sw.js'
+// await navigator.serviceWorker.register(url,{
+//   scope:"/"
+// })
+ 
+  
+
+
+// console.log("ppp")
+//   //  let value=  await  subscribe(serviceWorkerReg)
+//    console.log("Kkk")
+// let currentToken =await getToken(messaging,{vapidKey:"BNpMIfIwkjf6pAglhLNan1__wNS8dFvdiDNDzK7A69E6Fol9fhzV-uqJ7lY-bQQ6mjktLg9Jig0SPwGm52_V4OI"})
+
+
+//   // let topic='all'
+
+
+//   // let ress=await getMessaging().subscribeToTopic(currentToken, topic)
+
+  
+
+// console.log("scondtoken ")
+// console.log(currentToken)
+
+  
+
+
+//  api.post('/storePushNotification',{currentToken})
+//  console.log("tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+
+
+// }catch(error){
+
+//   console.log("erorrrrrrrrrrrrrrrrrrrrrrrrrrrr ibn  browser browser browser")
+//   console.log(error)
+// }
+
+async function subscribe(serviceWorkerReg) {
+  try {
+    let subscription = await serviceWorkerReg.pushManager.getSubscription();
+    if (!subscription) {
+      subscription = await serviceWorkerReg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: 'BMdNWN2lmEXF2F9cjH-zOOA-7ugTGloANQyN5i1w3Pw3hVvyOsjdKPTiGBkWET93CLcO8ix_mZFWJUpPBOI3dbM',
+      });
+
+      // Convert subscription object to JSON string
+const subscriptionJSON = JSON.stringify(subscription);
+
+// Store subscription in localStorage
+localStorage.setItem('subscription', subscriptionJSON);
+
+  setShowNotification(true)
+
+      const res = await api.post('/storePushNotification',{subscription})
+      console.log(res,"_______") // Send the subscription object to the server
+    }
+    console.log({ subscription });
+    return subscription;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+
+try {
+  const url = '/sw.js'; 
+  const reg = await navigator.serviceWorker.register(url,{
+    scope:"/"
+  });
+  console.log('Service worker registered:', reg);
+  await navigator.serviceWorker.ready;
+  console.log('Service worker is active');
+
+  await subscribe(reg);
+} catch (error) {
+  console.error('Service worker registration failed:', error);
+}
+
+
+  
+    }
+
+    
+
+
+    const UnsubscribeNotification=()=>{
+
+
+      
+         const storedSubscriptionJSON = localStorage.getItem('subscription');
+         if (storedSubscriptionJSON) {
+            localStorage.removeItem('subscription');
+            setShowNotification(false)
+           } 
+          
+
+
+
+        navigator.serviceWorker.ready.then((reg) => {
+          reg.pushManager.getSubscription().then((subscription) => {
+            subscription
+              .unsubscribe()
+              .then((successful) => {
+                // You've successfully unsubscribed
+                api.post('/UnsubscribeNotification',{subscription})
+
+            
+              })
+              .catch((e) => {
+                // Unsubscribing failed
+              });
+          });
+        });
+
+        
+
+      // navigator.serviceWorker.ready.then((reg) => {
+      //   reg.pushManager.getSubscription().then((subscription) => {
+      //     subscription
+
+      //     console.log("currrrrrrrrrrrrrrrrrrrentttttttttttttttttttttttttt")
+      //     .then((subscription) => {
+      //       if (subscription) {
+      //         // Log current subscription for debugging
+      //         console.log("Current subscription:", subscription);
+      
+      //         // Perform unsubscribe action
+      //         return subscription.unsubscribe();
+      //       } else {
+      //         console.log("No subscription found.");
+      //         throw new Error("No subscription available to unsubscribe.");
+      //       }
+      //     })
+      //     .then((successful) => {
+      //       // Handle successful unsubscription
+      //       console.log("Unsubscribed successfully:", successful);
+      //       alert("Successfully unsubscribed.");
+      //     })
+
+
+      //     // .unsubscribe()
+      //     // .then((successful) => {
+      //     //   // You've successfully unsubscribed
+      //     //   alert("clean")
+      //     // })
+      //     // .catch((e) => {
+      //     //   // Unsubscribing failed
+      //     // });
+
+      //     api.post('/UnsubscribeNotification',{subscription})
+      //     .then((res)=>{
+
+            
+          
+
+
+
+      //     })
+
+      
+           
+      //   });
+      // });
+
+      
+
+    }
+
+
+
+   
+const closethesubscription=()=>{
+
+  setSearchSubscripton(false)
+
+}
+
+
+const showSubscriptionFinishMessage=()=>{
+
+  setSearchSubscripton(false)
+  Swal.fire("subscription is over");
+}
   
   return (
     <div style={{position:"relative"}}>
-     {newMessage&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
+     {newMessage&&!newMessage.currentStatus&&<NewMessageNotificatoin  message={newMessage}   setIsOpen={setNewMessage} />}
       {notification&&<Notification   message={notification} onClose={closeNotification}  />}
+      {showSearchSubscription&&<SearchSubscription  onClose={closethesubscription}  SubscriptionFinishMessage={showSubscriptionFinishMessage}/>}
       {playAnimation && (
         <div
           style={{
@@ -426,8 +754,25 @@ const [newMessage,setNewMessage]=useState(null)
         </div>
       )}
       
-      <SideBar />
+      <SideBar  current={'Home'} />
+            
+            <div   className="absolute z-10 flex justify-end right-0 mt-4">
 
+            {!notificationShow&&<button className="text-gray-900 bg-[#F7BE38] hover:bg-[#F7BE38]/90 focus:ring-4 focus:outline-none focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#F7BE38]/50 me-2 mb-2" onClick={registerAndSubscribe}>
+      <svg className="w-4 h-4 me-2 -ms-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="paypal" role="img">
+        <path fill="currentColor" d="M111.4 295.9c-3.5 19.2-17.4 108.7-21.5 134-.3 1.8-1 2.5-3 2.5H12.3c-7.6 0-13.1-6.6-12.1-13.9L58.8 46.6c1.5-9.6 10.1-16.9 20-16.9 152.3 0 165.1-3.7 204 11.4 60.1 23.3 65.6 79.5 44 140.3-21.5 62.6-72.5 89.5-140.1 90.3-43.4 .7-69.5-7-75.3 24.2zM357.1 152c-1.8-1.3-2.5-1.8-3 1.3-2 11.4-5.1 22.5-8.8 33.6-39.9 113.8-150.5 103.9-204.5 103.9-6.1 0-10.1 3.3-10.9 9.4-22.6 140.4-27.1 169.7-27.1 169.7-1 7.1 3.5 12.9 10.6 12.9h63.5c8.6 0 15.7-6.3 17.4-14.9 .7-5.4-1.1 6.1 14.4-91.3 4.6-22 14.3-19.7 29.3-19.7 71 0 126.4-28.8 142.9-112.3 6.5-34.8 4.6-71.4-23.8-92.6z"></path>
+      </svg>
+      Allow Notifiation 
+    </button>}
+
+
+    {notificationShow&&<button className="text-gray-900 bg-[#F7BE38] hover:bg-[#F7BE38]/90 focus:ring-4 focus:outline-none focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#F7BE38]/50 me-2 mb-2" onClick={UnsubscribeNotification}>
+      <svg className="w-4 h-4 me-2 -ms-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="paypal" role="img">
+        <path fill="currentColor" d="M111.4 295.9c-3.5 19.2-17.4 108.7-21.5 134-.3 1.8-1 2.5-3 2.5H12.3c-7.6 0-13.1-6.6-12.1-13.9L58.8 46.6c1.5-9.6 10.1-16.9 20-16.9 152.3 0 165.1-3.7 204 11.4 60.1 23.3 65.6 79.5 44 140.3-21.5 62.6-72.5 89.5-140.1 90.3-43.4 .7-69.5-7-75.3 24.2zM357.1 152c-1.8-1.3-2.5-1.8-3 1.3-2 11.4-5.1 22.5-8.8 33.6-39.9 113.8-150.5 103.9-204.5 103.9-6.1 0-10.1 3.3-10.9 9.4-22.6 140.4-27.1 169.7-27.1 169.7-1 7.1 3.5 12.9 10.6 12.9h63.5c8.6 0 15.7-6.3 17.4-14.9 .7-5.4-1.1 6.1 14.4-91.3 4.6-22 14.3-19.7 29.3-19.7 71 0 126.4-28.8 142.9-112.3 6.5-34.8 4.6-71.4-23.8-92.6z"></path>
+      </svg>
+      Unsubscribe Notifiation 
+    </button>}
+            </div>
      
 
 
@@ -439,7 +784,9 @@ const [newMessage,setNewMessage]=useState(null)
       <div
         style={{
           height: "100vh",
-          marginLeft: "290px",
+        
+          marginLeft: open ? "290px" : "90px",
+          // marginLeft: "290px",
           overflow: "hidden",
           position: "relative",
         }}
