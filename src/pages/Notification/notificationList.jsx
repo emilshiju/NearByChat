@@ -10,7 +10,7 @@ import { Unconnect } from "../../service/crudConnections";
 import NewMessageNotificatoin from "../../components/messageNotification";
 import { removeUserCredential } from "../../store/authSlice";
 import { SideBarContext } from "../../context/createContext";
-
+import { responsiveContext } from "../../context/createContext";
 
 
 
@@ -129,7 +129,7 @@ const NotificationList = () => {
 
 
   const { open , setOpen }=useContext(SideBarContext)
-
+  const {responsiveMd,setResponsiveMd}=useContext(responsiveContext)
 
 
 
@@ -155,7 +155,7 @@ const NotificationList = () => {
                     className="flex items-center justify-between"
                     style={{ height: "50px" }}
                   >
-                    <div className="flex items-center">
+                    <div className="flex items-center" >
                       <div className="relative w-14 h-14 rounded-full hover:bg-red-700 bg-gradient-to-r from-purple-400 via-blue-500 to-red-400">
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-gray-200 rounded-full border-2 border-white">
                           {allNotification.receiverId.imageUrl && (

@@ -50,7 +50,7 @@ let accessToken =
 
 
 import { SideBarContext } from "../context/createContext";
-
+import { responsiveContext } from "../context/createContext";
 
   
 const Home = () => {
@@ -63,6 +63,7 @@ const Home = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
   const { value } = useContext(ThemeContext);
   const { open , setOpen }=useContext(SideBarContext)
+  const {responsiveMd,setResponsiveMd}=useContext(responsiveContext)
   const socket=useContext(SocketContext)
   const navigate = useNavigate();
 
@@ -725,6 +726,57 @@ const showSubscriptionFinishMessage=()=>{
   setSearchSubscripton(false)
   Swal.fire("subscription is over");
 }
+
+
+
+
+
+
+const handleResize = () => {
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+
+  // const screenWidth = window.innerWidth; // Use innerWidth for viewport width
+  // const screenHeight = window.innerHeight; // Use innerHeight for viewport height
+
+  console.log("Viewport Size Changed");
+  console.log("Width:", screenWidth, "Height:", screenHeight);
+
+  if (screenWidth <= 375 && screenHeight <= 667) {
+    console.log("Small screen");
+  
+    setOpen(false);
+    setResponsiveMd(false);
+  } else if (screenWidth > 400 && screenHeight > 700) {
+    console.log("Large screen");
+ 
+    setOpen(true);
+    setResponsiveMd(true);
+  }
+};
+
+useEffect(() => {
+  // Call handleResize once to set the initial state
+  handleResize();
+
+  // Add the event listener
+  window.addEventListener("resize", handleResize);
+
+  // Clean up the event listener
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
+
+
+const [toggle,settoggle]=useState(false)
+
+const toggleDropdown=()=>{
+
+  settoggle(!toggle)
+
+}
+
   
   return (
     <div style={{position:"relative"}}>
@@ -753,10 +805,42 @@ const showSubscriptionFinishMessage=()=>{
           />
         </div>
       )}
+
+
+
       
-      <SideBar  current={'Home'} />
+{!responsiveMd&&(<button
+  type="button"
+  style={{
+    position: 'absolute', // or 'fixed' if you want it to stay on top while scrolling
+    top: '10px', // adjust as needed
+    right: '10px', // adjust as needed
+    zIndex: 999, // a high value to ensure it's on top
+  }}
+  onClick={toggleDropdown}
+>
+  <svg
+    className="w-6 h-6"
+    aria-hidden="true"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clipRule="evenodd"
+      fillRule="evenodd"
+      d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+    />
+  </svg>
+</button>)}
+
+
+
+      
+      {responsiveMd ?<SideBar  current={'Home'} /> : toggle ? <SideBar  current={'Home'} /> :null  }
+      
             
-            <div   className="absolute z-10 flex justify-end right-0 mt-4">
+            {responsiveMd&&<div   className="absolute z-10 flex justify-end right-0 mt-4">
 
             {!notificationShow&&<button className="text-gray-900 bg-[#F7BE38] hover:bg-[#F7BE38]/90 focus:ring-4 focus:outline-none focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#F7BE38]/50 me-2 mb-2" onClick={registerAndSubscribe}>
       <svg className="w-4 h-4 me-2 -ms-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="paypal" role="img">
@@ -772,20 +856,20 @@ const showSubscriptionFinishMessage=()=>{
       </svg>
       Unsubscribe Notifiation 
     </button>}
-            </div>
+            </div>}
      
 
 
 
-      <div className="sidebar">
+      {responsiveMd&&<div className="sidebar">
         Longitude: {viewState.longitude} | Latitude: {viewState.latitude} |
         Zoom: {viewState.zoom}
-      </div>
+      </div>}
       <div
         style={{
           height: "100vh",
         
-          marginLeft: open ? "290px" : "90px",
+          marginLeft: open ? "290px" : responsiveMd ? "90px" : toggle ? "70px ":"0px",
           // marginLeft: "290px",
           overflow: "hidden",
           position: "relative",

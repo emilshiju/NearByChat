@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import api from "../route/interceptors"
+
 
 import { useSelector ,useDispatch} from "react-redux";
 
+
+import { SideBarContext } from "../context/createContext";
+import { responsiveContext } from "../context/createContext";
 
 const Guardian = () => {
 
@@ -91,6 +95,11 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
   const userInfo = useSelector((state) => state.auth.userInfo);
 
   const [allSubscription,setAllSubscription]=useState([])
+
+
+
+  const { open , setOpen }=useContext(SideBarContext)
+  const {responsiveMd,setResponsiveMd}=useContext(responsiveContext)
 
 
 
@@ -213,25 +222,28 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
 
       }
 
+
+
+
+      
     return (
         <>
-           <div className="fixed left-[400px] w-[1000px] h-[600px] mt-16 z-50">
+            {responsiveMd==true&&<div className="fixed left-[400px] w-[1000px] h-[600px] mt-16 z-50">
       <div className="bg-gray-300 font-sans lg:bg-transparent flex flex-col lg:flex-row absolute justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 px-5 xl:px-0 py-8 lg:py-0 w-full gap-6 items-center lg:items-stretch">
         {allSubscription?.map((data, index) => (
           <div key={index} className="relative">
             <div className="max-w-sm xl:w-[384px] p-6 bg-white group h-full rounded-2xl lg:hover:-translate-y-6 ease-in duration-300 hover:bg-[#0B0641] hover:text-white border xl:border-none border-[#0B0641]">
               <div className="flex flex-row gap-5 items-center">
-                {/* <div>{data.iconComponent}</div> */}
-                {/* <span className="text-3xl font-bold">{data.name}</span> */}
+                
               </div>
               <img
                 className="w-[100px] h-[100px] ml-20"
                 src={data?.imageUrl}
-                // src='https://firebasestorage.googleapis.com/v0/b/nearbychat-3e0c8.appspot.com/o/pngegg.png?alt=media&token=a1536d02-101f-42a5-89a5-55a137f886ba'
+              
                 alt="Subscription Icon"
               />
               <span className="flex mt-4 text-[#A9A9AA] text-2xl">What You&apos;ll Get</span>
-              {/* {PRICING_DATA?.benefits.map((benefit, index) => ( */}
+          
                 <div
                   key={index}
                   className="flex flex-row gap-2.5 items-start mt-6 text-left text-lg"
@@ -287,7 +299,54 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
                     close
                   </button>
     
-    </div>
+    </div>} 
+
+
+
+
+{responsiveMd==false&&<div className="fixed inset-0 m-4 lg:m-16 z-50 overflow-y-auto max-h-screen">
+  <div className="bg-gray-300 font-sans lg:bg-transparent flex flex-col lg:flex-row justify-center items-center lg:items-stretch px-5 xl:px-0 py-8 lg:py-0 gap-6 lg:gap-6 w-full max-w-full lg:w-[1000px] lg:h-[600px] lg:left-[50%] lg:top-[50%] lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2">
+    {allSubscription?.map((data, index) => (
+      <div key={index} className="relative max-w-full lg:max-w-sm xl:w-[384px] p-6 bg-white group h-full rounded-2xl lg:hover:-translate-y-6 ease-in duration-300 hover:bg-[#0B0641] hover:text-white border xl:border-none border-[#0B0641]">
+        <div className="flex flex-col items-center lg:items-start">
+          <img
+            className="w-[80px] h-[80px] mb-4"
+            src={data?.imageUrl}
+            alt="Subscription Icon"
+          />
+          <span className="text-[#A9A9AA] text-xl mb-4">What You&apos;ll Get</span>
+          <div className="flex flex-col gap-2.5 text-left text-base">
+            <div className="flex items-center gap-2.5">
+              <RightIcon />
+              <span>you will get upTo {data.maxCount} search</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <RightIcon />
+              <span>limited offer for {data.timePeriod} day</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <RightIcon />
+              <span>Advanced Search Feature</span>
+            </div>
+          </div>
+          <div className="border order-dashed border-[#A9A9AA] tracking-widest my-4" />
+          <div className="flex flex-col items-center mb-6">
+            <span className="text-[24px] font-bold">{data.price}</span>
+            <button className="w-full px-4 py-3 bg-[#FFF5FA] text-[#FF1D89] group-hover:text-white group-hover:bg-[#FF1D89] rounded-xl mt-4 font-semibold text-lg" onClick={() => displayRazorpay(data._id, data.price)}>
+              Choose
+            </button>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+  <button className="w-full px-4 py-2 mt-4 bg-transparent text-black group-hover:text-white group-hover:bg-[#FF1D89] rounded-md font-semibold text-xl" onClick={() => onClose()}>
+    Close
+  </button>
+</div>
+
+
+}
         </>
     )
 }

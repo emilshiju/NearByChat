@@ -10,12 +10,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { removeUserCredential } from "../store/authSlice";
 import { useDispatch} from 'react-redux';
 
-import { SideBarContext } from "../context/createContext";
+import { Responsive, responsiveContext, SideBarContext } from "../context/createContext";
 
 const Sidebar = ({current}) => {
   // const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
   const {open,setOpen}=useContext(SideBarContext)
+
+  const {responsiveMd,setResponsiveMd}=useContext(responsiveContext)
 
   const [screenHeight,setScreenHeight]=useState()
   const [screenWidth,setScreenWidht]=useState()
@@ -39,14 +41,25 @@ const screenheight = window.screen.height;
 // setScreenWidht(screenwidth)
 
 
-if(screenwidth==375&&screenheight==667){
+if(screenwidth<=375&&screenheight<=667){
 
   setOpen(false)
+  setResponsiveMd(false)
 console.log("=====================================================")
+}else{
+
+  // setOpen(true)
+  setResponsiveMd(true)
+
 }
 
-console.log(`Screen width: ${screenwidth}px`);
-console.log(`Screen height: ${screenheight}px`);
+// if(screenwidth>=375){
+//   setOpen(true)
+//   setResponsiveMd(true)
+// }
+
+// console.log(`Screen width: ${screenwidth}px`);
+// console.log(`Screen height: ${screenheight}px`);
 
 
   
