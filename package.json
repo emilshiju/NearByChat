@@ -44,6 +44,7 @@
     "i": "^0.3.7",
     "isomorphic-fetch": "^3.0.0",
     "jwt-decode": "^4.0.0",
+    "lottie-react": "^2.4.0",
     "mapbox-gl": "^3.5.2",
     "mdb-react-ui-kit": "^8.0.0",
     "node-fetch": "^3.3.2",
