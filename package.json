@@ -61,6 +61,7 @@
     "react-router-dom": "^6.26.0",
     "react-toastify": "^10.0.5",
     "rollup": "^4.20.0",
+    "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.12",
     "use-places-autocomplete": "^4.0.1",
     "yup": "^1.4.0"
@@ -80,7 +81,7 @@
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
   },
-    "optionalDependencies": {
+  "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
