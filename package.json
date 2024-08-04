@@ -17,6 +17,7 @@
     "@heroicons/react": "^2.1.5",
     "@mapbox/mapbox-gl-geocoder": "^5.0.2",
     "@material-tailwind/react": "^2.1.9",
+    "@material-ui/core": "^4.11.2",
     "@mui/icons-material": "^5.16.6",
     "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.6",
@@ -49,9 +50,9 @@
     "node-fetch": "^3.3.2",
     "npm": "^10.8.2",
     "razorpay": "^2.9.4",
-    "react": "^17.0.0 || ^18.0.0",
+    "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
-    "react-dom": "^17.0.0 || ^18.0.0",
+    "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
     "react-image-crop": "^11.0.6",
     "react-map-gl": "^7.1.7",
@@ -75,13 +76,5 @@
     "postcss": "^8.4.40",
     "tailwindcss": "^3.4.7",
     "vite": "^5.3.5"
-  },
-  "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
-  },
-  "resolutions": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
   }
 }
