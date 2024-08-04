@@ -63,6 +63,7 @@
     "rollup": "^4.20.0",
     "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.12",
+    "sweetalert2": "^11.12.4",
     "use-places-autocomplete": "^4.0.1",
     "yup": "^1.4.0"
   },
