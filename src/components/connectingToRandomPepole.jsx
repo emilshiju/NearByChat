@@ -121,7 +121,7 @@ socket.on("randomVideoConnection", (e) => {
 
 async function makeCall() {
 
- 
+  console.logo("1111111111111111111111")
 
   console.log("Amm rady ready reayd ")
   console.log("rdddddddd why not herere ")
@@ -159,53 +159,18 @@ async function makeCall() {
 
 
 
-// async function handleOffer(offer) {
-//   if (pc.current) {
-//     console.error("existing peerconnection");
-//     return;
-//   }
-//   try {
-//     pc.current = new RTCPeerConnection(configuration);
-//     pc.current.onicecandidate = (e) => {
-//       const message = {
-//         type: "candidate",
-//         id:receiver.current,
-//         candidate: null,
-//       };
-//       if (e.candidate) {
-//         message.candidate = e.candidate.candidate;
-//         message.sdpMid = e.candidate.sdpMid;
-//         message.sdpMLineIndex = e.candidate.sdpMLineIndex;
-//       }
-//       socket.emit("randomVideoConnection", message);
-//     };
-//     pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
-//     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
-//     await pc.current.setRemoteDescription(offer);
-
-//     const answer = await pc.current.createAnswer();
-//     socket.emit("randomVideoConnection", {id:receiver.current, type: "answer", sdp: answer.sdp });
-//     await pc.current.setLocalDescription(answer);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
-
 async function handleOffer(offer) {
+  console.log("22222222222222222222222222")
   if (pc.current) {
-    console.error("Existing peer connection. Resetting it.");
+    console.error("existing peerconnection");
     return;
   }
-  
   try {
     pc.current = new RTCPeerConnection(configuration);
-    
-    // Handle ICE candidates
     pc.current.onicecandidate = (e) => {
       const message = {
         type: "candidate",
-        id: receiver.current,
+        id:receiver.current,
         candidate: null,
       };
       if (e.candidate) {
@@ -215,32 +180,24 @@ async function handleOffer(offer) {
       }
       socket.emit("randomVideoConnection", message);
     };
-    
-    // Handle incoming tracks
-    pc.current.ontrack = (e) => {
-      remoteVideo.current.srcObject = e.streams[0];
-    };
-    
-    // Add local tracks
+    pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
+    await pc.current.setRemoteDescription(offer);
 
-    // Set remote offer
-    await pc.current.setRemoteDescription(new RTCSessionDescription(offer));
-    
-    // Create and send answer
     const answer = await pc.current.createAnswer();
-    socket.emit("randomVideoConnection", { id: receiver.current, type: "answer", sdp: answer.sdp });
+    socket.emit("randomVideoConnection", {id:receiver.current, type: "answer", sdp: answer.sdp });
     await pc.current.setLocalDescription(answer);
-
   } catch (e) {
-    console.log("Error handling offer:", e);
+    console.log(e);
   }
 }
 
 
 async function handleAnswer(answer) {
 
-  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",answer)
+  console.log("333333333333333333333")
+
+  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
   if (!pc.current) {
     console.error("no peerconnection");
     return;
@@ -253,6 +210,8 @@ async function handleAnswer(answer) {
 }
 
 async function handleCandidate(candidate) {
+
+  console.log("444444444444444444444444444")
   try {
    
     if (!pc.current) {
@@ -279,6 +238,7 @@ async function handleCandidate(candidate) {
 
 
 async function hangup() {
+  console.log("666666666666666666666666")
   if (pc.current) {
     pc.current.close();
     pc.current = null;
