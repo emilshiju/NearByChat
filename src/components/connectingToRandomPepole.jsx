@@ -509,7 +509,7 @@ setChange(true)
                 console.log("emiteddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
  
           
-                // socket.emit("randomVideoConnection", {id:opposite, type: "ready" });
+                socket.emit("randomVideoConnection", {id:opposite, type: "ready" });
                     
                 
               
@@ -657,11 +657,6 @@ useEffect(()=>{
   }
 },[])
 
-
-
-const handleConnect=()=>{
-  socket.emit("randomVideoConnection", {id:receiver.current, type: "ready" });
-}
     
   return (
     <div className="flex position:fixed ">
@@ -738,12 +733,6 @@ const handleConnect=()=>{
       <button class="bg-sky-500 ml-2 text-white text-3xl   px-10 py-2 rounded"  onClick={handleSkip}>
        Next <PlayCircleFilledWhiteIcon  style={{ fontSize: 28 }}  />
      </button>
-     <button class="bg-sky-500 ml-2 text-white text-3xl   px-10 py-2 rounded"  onClick={handleConnect}>
-     click
-     </button>
-
-
-     
 
 
 <br></br>
