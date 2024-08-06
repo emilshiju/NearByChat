@@ -660,7 +660,7 @@ useEffect(()=>{
 
 
 const handleConnect=()=>{
-  socket.emit("randomVideoConnection", {id:opposite, type: "ready" });
+  socket.emit("randomVideoConnection", {id:receiver.current, type: "ready" });
 }
     
   return (
