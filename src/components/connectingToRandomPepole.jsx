@@ -30,7 +30,7 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 const  configuration = {
   iceServers: [
       {
-          urls: 'turn:openrelay.metered.ca:80',
+        urls: 'turn:anonymouscall.metered.live:80',
           username: '30ea1bdef8518c5cc953604e',
           credentials: 'EhSNyIPD6mKcUSr8'
       }
