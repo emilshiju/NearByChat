@@ -27,16 +27,15 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 //   ],
 // };
 
-const  configuration = {
+const configuration  = {
   iceServers: [
       {
-        urls: 'turn:anonymouscall.metered.live:80',
-          username: '30ea1bdef8518c5cc953604e',
-          credentials: 'EhSNyIPD6mKcUSr8'
+          urls: 'turn:my-turn-server.mycompany.com:3478',
+          username: 'user',
+          credential: 'pass'
       }
   ]
 };
-
 
 
 const ConnectingToRandomPepole = () => {
