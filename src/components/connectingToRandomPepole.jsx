@@ -359,7 +359,7 @@ async function hangup() {
     const handleOppositeSkip=()=>{
 
       // setIsLoading(false)
-      // setChange(false)
+      setChange(false)
 
       if(remoteVideo.current.srcObject){
 
@@ -395,7 +395,7 @@ async function hangup() {
 
     const handleSkip=()=>{
       // setIsLoading(false)
-      // setChange(false)
+      setChange(false)
 
 //       remoteVideo.current=null
 
@@ -465,7 +465,7 @@ async function hangup() {
 
       socket.on('ready',(current,opposite)=>{
 
-// setChange(true)
+setChange(true)
         
                    console.log("random detailssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
                  
@@ -496,7 +496,7 @@ async function hangup() {
 
 
       socket.on('readys',(current,opposite)=>{
-          // setChange(true)
+          setChange(true)
    
           console.log("got oppositeuserID 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
          receiver.current=opposite
@@ -588,7 +588,7 @@ const handleKeyDown = (e) => {
   
 
 const handleComponetChange=()=>{
-//  setChange(false)
+ setChange(false)
 
   socket.emit("randomVideoConnection",{id:receiver.current,type:"skipped"})
 
@@ -663,7 +663,7 @@ useEffect(()=>{
     <div className="mr-5 mt-5 ml-5 position:fixed ">
       <div className="bg-gray-200 h-[330px] w-[600px] rounded-lg shadow-md">
        
-      {/* <div role="status" className="flex flex-col items-center justify-center">
+     {!change ?    <div role="status" className="flex flex-col items-center justify-center">
       <svg
         aria-hidden="true"
         className=" mt-28 w-30 h-36 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -681,10 +681,10 @@ useEffect(()=>{
         />
       </svg>
       <span className="sr-only">Loading...</span>
-    </div> */}
+    </div>:
 
       <video className="w-full h-full rounded-lg object-cover" ref={remoteVideo} autoPlay playsInline></video>
-      </div>
+   }   </div>
       <br></br>
       <div className="bg-gray-200 h-[330px] w-[600px] rounded-lg shadow-md">
         <video className="w-full h-full rounded-lg object-cover" ref={localVideo} autoPlay playsInline></video>
