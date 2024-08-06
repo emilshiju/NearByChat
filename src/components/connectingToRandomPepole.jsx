@@ -8,14 +8,14 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 
 
 
-// const configuration = {
-//   iceServers: [
-//     {
-//       urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
-//     },
-//   ],
-//   iceCandidatePoolSize: 10,
-// };
+const configuration = {
+  iceServers: [
+    {
+      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+    },
+  ],
+  iceCandidatePoolSize: 10,
+};
 
 // const configuration = {
 //   iceServers: [
@@ -27,15 +27,15 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 //   ],
 // };
 
-const configuration  = {
-  iceServers: [
-      {
-          urls: 'turn:my-turn-server.mycompany.com:3478',
-          username: 'user',
-          credential: 'pass'
-      }
-  ]
-};
+// const configuration  = {
+//   iceServers: [
+//       {
+//           urls: 'turn:my-turn-server.mycompany.com:3478',
+//           username: 'user',
+//           credential: 'pass'
+//       }
+//   ]
+// };
 
 
 const ConnectingToRandomPepole = () => {
