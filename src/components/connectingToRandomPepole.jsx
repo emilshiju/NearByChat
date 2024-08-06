@@ -194,7 +194,7 @@ async function handleOffer(offer) {
 
 async function handleAnswer(answer) {
 
-  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",answer)
   if (!pc.current) {
     console.error("no peerconnection");
     return;
