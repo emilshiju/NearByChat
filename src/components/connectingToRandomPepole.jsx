@@ -509,7 +509,7 @@ setChange(true)
                 console.log("emiteddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
  
           
-                socket.emit("randomVideoConnection", {id:opposite, type: "ready" });
+                // socket.emit("randomVideoConnection", {id:opposite, type: "ready" });
                     
                 
               
