@@ -192,19 +192,35 @@ async function handleOffer(offer) {
 }
 
 
-async function handleAnswer(answer) {
+// async function handleAnswer(answer) {
 
-  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-  if (!pc.current) {
-    console.error("no peerconnection");
-    return;
-  }
+//   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+//   if (!pc.current) {
+//     console.error("no peerconnection");
+//     return;
+//   }
+//   try {
+//     await pc.current.setRemoteDescription(answer);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+
+
+async function  handleAnswer (answer) {
   try {
-    await pc.current.setRemoteDescription(answer);
-  } catch (e) {
-    console.log(e);
+    // Check if the current signaling state is 'have-local-offer'
+    if (pc.current.signalingState === 'have-local-offer') {
+      await pc.current.setRemoteDescription(new RTCSessionDescription(answer));
+      console.log('Remote description set');
+    } else {
+      console.log('Signaling state is not correct for setting answer:', pc.current.signalingState);
+    }
+  } catch (error) {
+    console.error('Error setting remote description:', error);
   }
-}
+};
+
 
 async function handleCandidate(candidate) {
   try {
