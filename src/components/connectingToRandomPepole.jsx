@@ -120,195 +120,116 @@ socket.on("randomVideoConnection", (e) => {
 
 
 async function makeCall() {
+
+ 
+
+  console.log("Amm rady ready reayd ")
+  console.log("rdddddddd why not herere ")
+  console.log(receiver.current)
+  console.log("finishi")
+    
   try {
-    // Check if a peer connection already exists
-    if (pc.current) {
-      console.warn("Existing peer connection. Closing the old one.");
-      pc.current.close();
-    }
-
-    // Initialize peer connection
     pc.current = new RTCPeerConnection(configuration);
-
-    // Set up ICE candidate handler
+    console.log("2")
     pc.current.onicecandidate = (e) => {
+      const message = {
+        type: "candidate",
+        candidate: null,
+        id:receiver.current,
+      };
+      console.log("3")
       if (e.candidate) {
-        socket.emit("randomVideoConnection", {
-          type: "candidate",
-          candidate: e.candidate.candidate,
-          id: receiver.current,
-          sdpMid: e.candidate.sdpMid,
-          sdpMLineIndex: e.candidate.sdpMLineIndex,
-        });
+        message.candidate = e.candidate.candidate;
+        message.sdpMid = e.candidate.sdpMid;
+        message.sdpMLineIndex = e.candidate.sdpMLineIndex;
       }
+      console.log("4")
+      socket.emit("randomVideoConnection", message);
     };
-
-    // Handle remote track
-    pc.current.ontrack = (e) => {
-      if (remoteVideo.current) {
-        remoteVideo.current.srcObject = e.streams[0];
-      }
-    };
-
-    // Add local tracks
+    console.log("5")
+    pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
-
-    // Create and send offer
     const offer = await pc.current.createOffer();
+    socket.emit("randomVideoConnection", {id:receiver.current, type: "offer", sdp: offer.sdp });
     await pc.current.setLocalDescription(offer);
-    socket.emit("randomVideoConnection", { id: receiver.current, type: "offer", sdp: offer.sdp });
   } catch (e) {
-    console.error("Error making call:", e);
+    console.log(e);
   }
 }
 
 
-
-
-// async function handleOffer(offer) {
-//   if (pc.current) {
-//     console.error("existing peerconnection");
-//     return;
-//   }
-//   try {
-//     pc.current = new RTCPeerConnection(configuration);
-//     pc.current.onicecandidate = (e) => {
-//       const message = {
-//         type: "candidate",
-//         id:receiver.current,
-//         candidate: null,
-//       };
-//       if (e.candidate) {
-//         message.candidate = e.candidate.candidate;
-//         message.sdpMid = e.candidate.sdpMid;
-//         message.sdpMLineIndex = e.candidate.sdpMLineIndex;
-//       }
-//       socket.emit("randomVideoConnection", message);
-//     };
-//     pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
-//     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
-//     await pc.current.setRemoteDescription(offer);
-
-//     const answer = await pc.current.createAnswer();
-//     socket.emit("randomVideoConnection", {id:receiver.current, type: "answer", sdp: answer.sdp });
-//     await pc.current.setLocalDescription(answer);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
 
 async function handleOffer(offer) {
   if (pc.current) {
-    console.error("Existing peer connection. Aborting offer handling.");
+    console.error("existing peerconnection");
     return;
   }
-
   try {
     pc.current = new RTCPeerConnection(configuration);
-
-    // Set up ICE candidate handler
     pc.current.onicecandidate = (e) => {
+      const message = {
+        type: "candidate",
+        id:receiver.current,
+        candidate: null,
+      };
       if (e.candidate) {
-        socket.emit("randomVideoConnection", {
-          type: "candidate",
-          candidate: e.candidate.candidate,
-          id: receiver.current,
-          sdpMid: e.candidate.sdpMid,
-          sdpMLineIndex: e.candidate.sdpMLineIndex,
-        });
+        message.candidate = e.candidate.candidate;
+        message.sdpMid = e.candidate.sdpMid;
+        message.sdpMLineIndex = e.candidate.sdpMLineIndex;
       }
+      socket.emit("randomVideoConnection", message);
     };
-
-    // Handle remote track
-    pc.current.ontrack = (e) => {
-      if (remoteVideo.current) {
-        remoteVideo.current.srcObject = e.streams[0];
-      }
-    };
-
-    // Add local tracks
+    pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
+    await pc.current.setRemoteDescription(offer);
 
-    // Set remote description and create answer
-    await pc.current.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await pc.current.createAnswer();
+    socket.emit("randomVideoConnection", {id:receiver.current, type: "answer", sdp: answer.sdp });
     await pc.current.setLocalDescription(answer);
-    socket.emit("randomVideoConnection", { id: receiver.current, type: "answer", sdp: answer.sdp });
   } catch (e) {
-    console.error("Error handling offer:", e);
+    console.log(e);
   }
 }
 
-
-// async function handleAnswer(answer) {
-
-//   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-//   if (!pc.current) {
-//     console.error("no peerconnection");
-//     return;
-//   }
-//   try {
-//     await pc.current.setRemoteDescription(answer);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
 
 async function handleAnswer(answer) {
+
+  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
   if (!pc.current) {
-    console.error("No peer connection");
+    console.error("no peerconnection");
     return;
   }
-
   try {
-    await pc.current.setRemoteDescription(new RTCSessionDescription(answer));
-    console.log("Remote description set successfully.");
+    await pc.current.setRemoteDescription(answer);
   } catch (e) {
-    console.error("Error setting remote description:", e);
+    console.log(e);
   }
 }
-
-
-// async function handleCandidate(candidate) {
-//   try {
-   
-//     if (!pc.current) {
-//       console.error("no peerconnection");
-//       return;
-//     }
- 
-//     if (!candidate) {
-     
-//       await pc.current.addIceCandidate(null);
-//     } else {
-    
-//       await pc.current.addIceCandidate(candidate);
-    
-//     }
-
-    
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
 
 async function handleCandidate(candidate) {
-  if (!pc.current) {
-    console.error("No peer connection");
-    return;
-  }
-
   try {
-    if (candidate) {
-      // Ensure candidate has valid properties
-      const iceCandidate = new RTCIceCandidate(candidate);
-      await pc.current.addIceCandidate(iceCandidate);
+   
+    if (!pc.current) {
+      console.error("no peerconnection");
+      return;
     }
+ 
+    if (!candidate) {
+     
+      await pc.current.addIceCandidate(null);
+    } else {
+    
+      await pc.current.addIceCandidate(candidate);
+    
+    }
+
+    
   } catch (e) {
-    console.error("Error adding ICE candidate:", e);
+    console.log(e);
   }
 }
+
+
 
 
 async function hangup() {
