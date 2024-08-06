@@ -196,29 +196,38 @@ async function handleOffer(offer) {
     console.error("Existing peer connection. Aborting offer handling.");
     return;
   }
-  
+
   try {
     pc.current = new RTCPeerConnection(configuration);
 
-    // Set up event handlers
+    // Set up ICE candidate handler
     pc.current.onicecandidate = (e) => {
-      // Handle ICE candidates
+      if (e.candidate) {
+        socket.emit("randomVideoConnection", {
+          type: "candidate",
+          candidate: e.candidate.candidate,
+          id: receiver.current,
+          sdpMid: e.candidate.sdpMid,
+          sdpMLineIndex: e.candidate.sdpMLineIndex,
+        });
+      }
     };
+
+    // Handle remote track
     pc.current.ontrack = (e) => {
-      // Handle remote tracks
+      if (remoteVideo.current) {
+        remoteVideo.current.srcObject = e.streams[0];
+      }
     };
 
     // Add local tracks
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
 
-    // Set remote offer and create answer
+    // Set remote description and create answer
     await pc.current.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await pc.current.createAnswer();
     await pc.current.setLocalDescription(answer);
-
-    // Send the answer
     socket.emit("randomVideoConnection", { id: receiver.current, type: "answer", sdp: answer.sdp });
-
   } catch (e) {
     console.error("Error handling offer:", e);
   }
@@ -235,11 +244,9 @@ async function handleOffer(offer) {
 //   try {
 //     await pc.current.setRemoteDescription(answer);
 //   } catch (e) {
-//     console.log("error causingggggggggggggggggggggggggggggggggggggg")
 //     console.log(e);
 //   }
 // }
-
 
 async function handleAnswer(answer) {
   if (!pc.current) {
@@ -248,11 +255,6 @@ async function handleAnswer(answer) {
   }
 
   try {
-    if (pc.current.signalingState !== 'have-local-offer') {
-      console.error("Unexpected signaling state:", pc.current.signalingState);
-      return;
-    }
-
     await pc.current.setRemoteDescription(new RTCSessionDescription(answer));
     console.log("Remote description set successfully.");
   } catch (e) {
@@ -261,30 +263,44 @@ async function handleAnswer(answer) {
 }
 
 
+// async function handleCandidate(candidate) {
+//   try {
+   
+//     if (!pc.current) {
+//       console.error("no peerconnection");
+//       return;
+//     }
+ 
+//     if (!candidate) {
+     
+//       await pc.current.addIceCandidate(null);
+//     } else {
+    
+//       await pc.current.addIceCandidate(candidate);
+    
+//     }
+
+    
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+
 
 async function handleCandidate(candidate) {
-  try {
-   
-    if (!pc.current) {
-      console.error("no peerconnection");
-      return;
-    }
- 
-    if (!candidate) {
-     
-      await pc.current.addIceCandidate(null);
-    } else {
-    
-      await pc.current.addIceCandidate(candidate);
-    
-    }
+  if (!pc.current) {
+    console.error("No peer connection");
+    return;
+  }
 
-    
+  try {
+    if (candidate) {
+      await pc.current.addIceCandidate(new RTCIceCandidate(candidate));
+    }
   } catch (e) {
-    console.log(e);
+    console.error("Error adding ICE candidate:", e);
   }
 }
-
 
 
 
