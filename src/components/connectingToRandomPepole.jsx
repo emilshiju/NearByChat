@@ -8,14 +8,25 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 
 
 
+// const configuration = {
+//   iceServers: [
+//     {
+//       urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+//     },
+//   ],
+//   iceCandidatePoolSize: 10,
+// };
+
 const configuration = {
   iceServers: [
     {
-      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+      urls: "turn:relay1.expressturn.com:3478",
+      username: "efB3PHAS7NRJCXT6FS",
+      credential: "NFrXhVpoja6Tin3b",
     },
   ],
-  iceCandidatePoolSize: 10,
 };
+
 
 
 const ConnectingToRandomPepole = () => {
