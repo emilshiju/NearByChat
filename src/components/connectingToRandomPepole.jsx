@@ -200,7 +200,7 @@ async function handleAnswer(answer) {
     return;
   }
   try {
-    await pc.current.setRemoteDescription(answer);
+    await pc.current.setRemoteDescription(new RTCSessionDescription(answer));
   } catch (e) {
     console.log(e);
   }
