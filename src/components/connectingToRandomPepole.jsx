@@ -121,7 +121,7 @@ socket.on("randomVideoConnection", (e) => {
 
 async function makeCall() {
 
-  console.logo("1111111111111111111111")
+ 
 
   console.log("Amm rady ready reayd ")
   console.log("rdddddddd why not herere ")
@@ -160,7 +160,6 @@ async function makeCall() {
 
 
 async function handleOffer(offer) {
-  console.log("22222222222222222222222222")
   if (pc.current) {
     console.error("existing peerconnection");
     return;
@@ -195,8 +194,6 @@ async function handleOffer(offer) {
 
 async function handleAnswer(answer) {
 
-  console.log("333333333333333333333")
-
   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
   if (!pc.current) {
     console.error("no peerconnection");
@@ -210,8 +207,6 @@ async function handleAnswer(answer) {
 }
 
 async function handleCandidate(candidate) {
-
-  console.log("444444444444444444444444444")
   try {
    
     if (!pc.current) {
@@ -238,7 +233,6 @@ async function handleCandidate(candidate) {
 
 
 async function hangup() {
-  console.log("666666666666666666666666")
   if (pc.current) {
     pc.current.close();
     pc.current = null;
