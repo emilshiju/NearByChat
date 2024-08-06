@@ -119,45 +119,104 @@ socket.on("randomVideoConnection", (e) => {
 
 
 
-async function makeCall() {
+// async function makeCall() {
 
  
 
-  console.log("Amm rady ready reayd ")
-  console.log("rdddddddd why not herere ")
-  console.log(receiver.current)
-  console.log("finishi")
+//   console.log("Amm rady ready reayd ")
+//   console.log("rdddddddd why not herere ")
+//   console.log(receiver.current)
+//   console.log("finishi")
     
+//   try {
+//     pc.current = new RTCPeerConnection(configuration);
+//     console.log("2")
+//     pc.current.onicecandidate = (e) => {
+//       const message = {
+//         type: "candidate",
+//         candidate: null,
+//         id:receiver.current,
+//       };
+//       console.log("3")
+//       if (e.candidate) {
+//         message.candidate = e.candidate.candidate;
+//         message.sdpMid = e.candidate.sdpMid;
+//         message.sdpMLineIndex = e.candidate.sdpMLineIndex;
+//       }
+//       console.log("4")
+//       socket.emit("randomVideoConnection", message);
+//     };
+//     console.log("5")
+//     pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
+//     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
+//     const offer = await pc.current.createOffer();
+//     socket.emit("randomVideoConnection", {id:receiver.current, type: "offer", sdp: offer.sdp });
+//     await pc.current.setLocalDescription(offer);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+
+
+async function makeCall() {
   try {
     pc.current = new RTCPeerConnection(configuration);
-    console.log("2")
     pc.current.onicecandidate = (e) => {
       const message = {
         type: "candidate",
         candidate: null,
-        id:receiver.current,
+        id: receiver.current,
       };
-      console.log("3")
       if (e.candidate) {
         message.candidate = e.candidate.candidate;
         message.sdpMid = e.candidate.sdpMid;
         message.sdpMLineIndex = e.candidate.sdpMLineIndex;
       }
-      console.log("4")
       socket.emit("randomVideoConnection", message);
     };
-    console.log("5")
     pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
     const offer = await pc.current.createOffer();
-    socket.emit("randomVideoConnection", {id:receiver.current, type: "offer", sdp: offer.sdp });
     await pc.current.setLocalDescription(offer);
+    socket.emit("randomVideoConnection", { id: receiver.current, type: "offer", sdp: offer.sdp });
   } catch (e) {
     console.log(e);
   }
 }
 
 
+
+// async function handleOffer(offer) {
+//   if (pc.current) {
+//     console.error("existing peerconnection");
+//     return;
+//   }
+//   try {
+//     pc.current = new RTCPeerConnection(configuration);
+//     pc.current.onicecandidate = (e) => {
+//       const message = {
+//         type: "candidate",
+//         id:receiver.current,
+//         candidate: null,
+//       };
+//       if (e.candidate) {
+//         message.candidate = e.candidate.candidate;
+//         message.sdpMid = e.candidate.sdpMid;
+//         message.sdpMLineIndex = e.candidate.sdpMLineIndex;
+//       }
+//       socket.emit("randomVideoConnection", message);
+//     };
+//     pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
+//     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
+//     await pc.current.setRemoteDescription(offer);
+
+//     const answer = await pc.current.createAnswer();
+//     socket.emit("randomVideoConnection", {id:receiver.current, type: "answer", sdp: answer.sdp });
+//     await pc.current.setLocalDescription(answer);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
 
 async function handleOffer(offer) {
   if (pc.current) {
@@ -169,7 +228,7 @@ async function handleOffer(offer) {
     pc.current.onicecandidate = (e) => {
       const message = {
         type: "candidate",
-        id:receiver.current,
+        id: receiver.current,
         candidate: null,
       };
       if (e.candidate) {
@@ -181,10 +240,17 @@ async function handleOffer(offer) {
     };
     pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
-    await pc.current.setRemoteDescription(offer);
+
+    // Check current signaling state before setting remote description
+    if (pc.current.signalingState === "stable") {
+      await pc.current.setRemoteDescription(offer);
+    } else {
+      console.error(`Invalid state for setting remote offer: ${pc.current.signalingState}`);
+      return;
+    }
 
     const answer = await pc.current.createAnswer();
-    socket.emit("randomVideoConnection", {id:receiver.current, type: "answer", sdp: answer.sdp });
+    socket.emit("randomVideoConnection", { id: receiver.current, type: "answer", sdp: answer.sdp });
     await pc.current.setLocalDescription(answer);
   } catch (e) {
     console.log(e);
@@ -192,19 +258,39 @@ async function handleOffer(offer) {
 }
 
 
-async function handleAnswer(answer) {
 
+// async function handleAnswer(answer) {
+
+//   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+//   if (!pc.current) {
+//     console.error("no peerconnection");
+//     return;
+//   }
+//   try {
+//     await pc.current.setRemoteDescription(answer);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+
+async function handleAnswer(answer) {
   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
   if (!pc.current) {
     console.error("no peerconnection");
     return;
   }
   try {
-    await pc.current.setRemoteDescription(answer);
+    // Check if in the correct state to set the remote answer
+    if (pc.current.signalingState === "have-local-offer") {
+      await pc.current.setRemoteDescription(answer);
+    } else {
+      console.error(`Invalid state for setting remote answer: ${pc.current.signalingState}`);
+    }
   } catch (e) {
     console.log(e);
   }
 }
+
 
 async function handleCandidate(candidate) {
   try {
