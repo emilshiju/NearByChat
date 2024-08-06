@@ -17,14 +17,24 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 //   iceCandidatePoolSize: 10,
 // };
 
-const configuration = {
+// const configuration = {
+//   iceServers: [
+//     {
+//       urls: "turn:relay1.expressturn.com:3478",
+//       username: "efB3PHAS7NRJCXT6FS",
+//       credential: "NFrXhVpoja6Tin3b",
+//     },
+//   ],
+// };
+
+const  configuration = {
   iceServers: [
-    {
-      urls: "turn:relay1.expressturn.com:3478",
-      username: "efB3PHAS7NRJCXT6FS",
-      credential: "NFrXhVpoja6Tin3b",
-    },
-  ],
+      {
+          urls: 'turn:openrelay.metered.ca:80',
+          username: '30ea1bdef8518c5cc953604e',
+          credentials: 'EhSNyIPD6mKcUSr8'
+      }
+  ]
 };
 
 
