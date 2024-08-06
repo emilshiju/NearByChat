@@ -120,42 +120,48 @@ socket.on("randomVideoConnection", (e) => {
 
 
 async function makeCall() {
-
- 
-
-  console.log("Amm rady ready reayd ")
-  console.log("rdddddddd why not herere ")
-  console.log(receiver.current)
-  console.log("finishi")
-    
   try {
+    // Check if a peer connection already exists
+    if (pc.current) {
+      console.warn("Existing peer connection. Closing the old one.");
+      pc.current.close();
+    }
+
+    // Initialize peer connection
     pc.current = new RTCPeerConnection(configuration);
-    console.log("2")
+
+    // Set up ICE candidate handler
     pc.current.onicecandidate = (e) => {
-      const message = {
-        type: "candidate",
-        candidate: null,
-        id:receiver.current,
-      };
-      console.log("3")
       if (e.candidate) {
-        message.candidate = e.candidate.candidate;
-        message.sdpMid = e.candidate.sdpMid;
-        message.sdpMLineIndex = e.candidate.sdpMLineIndex;
+        socket.emit("randomVideoConnection", {
+          type: "candidate",
+          candidate: e.candidate.candidate,
+          id: receiver.current,
+          sdpMid: e.candidate.sdpMid,
+          sdpMLineIndex: e.candidate.sdpMLineIndex,
+        });
       }
-      console.log("4")
-      socket.emit("randomVideoConnection", message);
     };
-    console.log("5")
-    pc.current.ontrack = (e) => (remoteVideo.current.srcObject = e.streams[0]);
+
+    // Handle remote track
+    pc.current.ontrack = (e) => {
+      if (remoteVideo.current) {
+        remoteVideo.current.srcObject = e.streams[0];
+      }
+    };
+
+    // Add local tracks
     localStream.current.getTracks().forEach((track) => pc.current.addTrack(track, localStream.current));
+
+    // Create and send offer
     const offer = await pc.current.createOffer();
-    socket.emit("randomVideoConnection", {id:receiver.current, type: "offer", sdp: offer.sdp });
     await pc.current.setLocalDescription(offer);
+    socket.emit("randomVideoConnection", { id: receiver.current, type: "offer", sdp: offer.sdp });
   } catch (e) {
-    console.log(e);
+    console.error("Error making call:", e);
   }
 }
+
 
 
 
@@ -295,13 +301,14 @@ async function handleCandidate(candidate) {
 
   try {
     if (candidate) {
-      await pc.current.addIceCandidate(new RTCIceCandidate(candidate));
+      // Ensure candidate has valid properties
+      const iceCandidate = new RTCIceCandidate(candidate);
+      await pc.current.addIceCandidate(iceCandidate);
     }
   } catch (e) {
     console.error("Error adding ICE candidate:", e);
   }
 }
-
 
 
 async function hangup() {
