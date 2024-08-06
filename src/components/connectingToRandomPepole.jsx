@@ -192,20 +192,46 @@ async function handleOffer(offer) {
 }
 
 
-async function handleAnswer(answer) {
+// async function handleAnswer(answer) {
 
-  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+//   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+//   if (!pc.current) {
+//     console.error("no peerconnection");
+//     return;
+//   }
+//   try {
+//     await pc.current.setRemoteDescription(answer);
+//   } catch (e) {
+//     console.log("error causingggggggggggggggggggggggggggggggggggggg")
+//     console.log(e);
+//   }
+// }
+
+
+async function handleAnswer(answer) {
+  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+  
   if (!pc.current) {
     console.error("no peerconnection");
     return;
   }
+
+  console.log("Current signaling state:", pc.current.signalingState);
+
+  if (pc.current.signalingState !== 'have-local-offer') {
+    console.error("Unexpected signaling state:", pc.current.signalingState);
+    return;
+  }
+
   try {
     await pc.current.setRemoteDescription(answer);
+    console.log("Remote description set successfully.");
   } catch (e) {
-    console.log("error causingggggggggggggggggggggggggggggggggggggg")
-    console.log(e);
+    console.log("Error setting remote description:", e);
   }
 }
+
+
 
 async function handleCandidate(candidate) {
   try {
