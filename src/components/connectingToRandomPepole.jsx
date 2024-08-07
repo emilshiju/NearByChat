@@ -8,14 +8,14 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 
 
 
-const configuration = {
-  iceServers: [
-    {
-      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
-    },
-  ],
-  iceCandidatePoolSize: 10,
-};
+// const configuration = {
+//   iceServers: [
+//     {
+//       urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+//     },
+//   ],
+//   iceCandidatePoolSize: 10,
+// };
 
 
 // const configuration = {
@@ -45,15 +45,15 @@ const configuration = {
 //   ],
 // };
 
-// const configuration  = {
-//   iceServers: [
-//       {
-//           urls: 'turn:turn.anonymous10.cloud:3478',
-//           username: 'user',
-//           credential: 'pass'
-//       }
-//   ]
-// };
+const configuration  = {
+  iceServers: [
+      {
+          urls: 'turn:turn.anonymous10.cloud:3478',
+          username: 'user',
+          credential: 'pass'
+      }
+  ]
+};
 
 
 const ConnectingToRandomPepole = () => {
@@ -159,7 +159,7 @@ socket.on("randomVideoConnection", (e) => {
 
 async function makeCall() {
 
- console.log("firstttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
+ console.log("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
 
   console.log("Amm rady ready reayd ")
   console.log("rdddddddd why not herere ")
@@ -246,6 +246,7 @@ async function handleAnswer(answer) {
 }
 
 async function handleCandidate(candidate) {
+  console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222")
   try {
    
     if (!pc.current) {
