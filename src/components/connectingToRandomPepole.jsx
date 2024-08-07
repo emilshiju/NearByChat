@@ -199,6 +199,8 @@ async function makeCall() {
 
 
 async function handleOffer(offer) {
+
+  console.log("33333333333333333333333333333333333333333333333333333333333333333333333333333333")
   if (pc.current) {
     console.error("existing peerconnection");
     return;
@@ -232,6 +234,8 @@ async function handleOffer(offer) {
 
 
 async function handleAnswer(answer) {
+
+  console.log("5555555555555555555555555555555555555555555555555555555555555555555555")
 
   console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
   if (!pc.current) {
