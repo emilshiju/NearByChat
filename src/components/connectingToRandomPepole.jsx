@@ -159,7 +159,7 @@ socket.on("randomVideoConnection", (e) => {
 
 async function makeCall() {
 
- 
+ console.log("firstttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
 
   console.log("Amm rady ready reayd ")
   console.log("rdddddddd why not herere ")
@@ -442,6 +442,7 @@ async function hangup() {
 //   pc.current.close();
 //   pc.current = null;
 // }
+console.log("skipeddddddddddddddddddddddddddddddddddddddddddddddddd")
 
       socket.emit("removeUsersArray",{userId,receiver:receiver.current})
 
