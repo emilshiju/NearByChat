@@ -164,7 +164,8 @@ async function makeCall() {
   console.log("Amm rady ready reayd ")
   console.log("rdddddddd why not herere ")
   console.log(receiver.current)
-  console.log("finishi")
+  console.log("finishiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+  console.log(configuration)
     
   try {
     pc.current = new RTCPeerConnection(configuration);
