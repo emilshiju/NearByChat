@@ -48,9 +48,9 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 const configuration  = {
   iceServers: [
       {
-          urls: 'turn:turn.anonymous10.cloud:3478',
-          username: 'user',
-          credential: 'pass'
+          urls: 'relay1.expressturn.com:3478',
+          username: 'efB3PHAS7NRJCXT6FS',
+          credential: 'NFrXhVpoja6Tin3b'
       }
   ]
 };
