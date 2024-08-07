@@ -20,9 +20,9 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTime
 
 const configuration = {
   iceServers: [
-    {
-      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
-    },
+    // {
+    //   urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+    // },
     {
         "urls": "turn:turn.anonymous10.cloud:3478",
         "username": "user",
@@ -30,7 +30,7 @@ const configuration = {
       }
     ,
   ],
-  iceCandidatePoolSize: 10,
+  // iceCandidatePoolSize: 10,
 };
 
 
