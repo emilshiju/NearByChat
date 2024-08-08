@@ -51,8 +51,8 @@ const configuration  = {
           urls: 'turn:turn.anonymous10.cloud:3478',
           username: 'user',
           credential: 'pass'
-      },
-  ],iceTransportPolicy: 'relay'
+      }
+  ]
 };
 
 
