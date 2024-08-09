@@ -16,6 +16,7 @@ const Menus = [
     { title: "ChatBox", src: "Overview",icon:ChatBubbleOutlineOutlinedIcon,link:'/chatBox'},
     { title: "chatRandom", src: "Overview",icon:DuoIcon,link:'/chatRandom'},
     { title: "settings", src: "Overview",icon:SettingsIcon,link:'/settings'  },
+    { title: "chatRandom", src: "Overview",icon:DuoIcon,link:'/sample'},
     // { title: "Overview", src: "Overview"  },
     // { title: "Overview", src: "Overview"  },
 

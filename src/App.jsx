@@ -23,6 +23,7 @@ import Settings from "./pages/settings/settings"
 import EditUserDetails from "./pages/settings/editUserDetails"
 import ForgotPassword from "./pages/settings/forgotPassword"
 import OrderSummary from "./pages/settings/orderSummary"
+import Sample from "./pages/sample"
 
 const router=createBrowserRouter([
    
@@ -98,6 +99,11 @@ const router=createBrowserRouter([
     {
         path:"/orderSummary",
         element:(<OrderSummary  />)
+    }
+    ,
+    {
+        path:'/sample',
+        element:(<Sample  />)
     }
 ])
 
