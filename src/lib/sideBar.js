@@ -17,6 +17,8 @@ const Menus = [
     { title: "chatRandom", src: "Overview",icon:DuoIcon,link:'/chatRandom'},
     { title: "settings", src: "Overview",icon:SettingsIcon,link:'/settings'  },
     { title: "chatRandom", src: "Overview",icon:DuoIcon,link:'/sample'},
+    { title: "chatRandom", src: "Overview",icon:HomeIcon,link:'/sampleChat'},
+    { title: "chatRandom", src: "Overview",icon:NotificationsNoneIcon,link:'/notificationSample'},
     // { title: "Overview", src: "Overview"  },
     // { title: "Overview", src: "Overview"  },
 

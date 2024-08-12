@@ -19,7 +19,7 @@ import {
   // import DatePicker from 'react-date-picker';
   
   // import  {registerInitialValues} from "../schema/registeration"
-  import "../Home.css"
+  import "../Home/home.css"
   import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
   import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
   import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

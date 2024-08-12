@@ -1,22 +1,22 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 
-import "./Home.css";
+import "./home.css";
 
-import SideBar from "../components/sideBar";
+import SideBar from "../../components/sideBar";
 import { useNavigate, useParams } from "react-router-dom";
-import CustomMarks from "../components/slider";
-import { ThemeContext } from "../context/createContext";
+import CustomMarks from "../../components/slider";
+import { ThemeContext } from "../../context/createContext";
 import { useContext } from "react";
-import api from "../route/interceptors";
+import api from "../../route/interceptors";
 import { useSelector ,useDispatch} from "react-redux";
 import Button from "@mui/material/Button";
-import locationIcon from "../assets/location.png";
+import locationIcon from "../../assets/location.png";
 import SendIcon from "@mui/icons-material/Send";
 import Box from "@mui/material/Box";
-import profileForm, { updateImageUrl } from "../service/profileForm";
-import LocationPinAnimation from "../components/locationpinAnimation";
-import locationPinAnimation from '../../locationPinAnimation.json';
-import NewMessageNotificatoin from "../components/messageNotification";
+import profileForm, { updateImageUrl } from "../../service/profileForm";
+import LocationPinAnimation from "../../components/locationpinAnimation";
+import locationPinAnimation from '../../../locationPinAnimation.json';
+import NewMessageNotificatoin from "../../components/messageNotification";
 
 import Map, {
   GeolocateControl,
@@ -27,30 +27,30 @@ import Map, {
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import Swal from "sweetalert2";
-import locationService from "../service/locationService";
+import locationService from "../../service/locationService";
 import io from "socket.io-client";
 import Lottie from 'lottie-react';
-import getProfile from "../service/getProfile";
+import getProfile from "../../service/getProfile";
 
 // export const socket = io("http://localhost:5000");
 // import { socket } from '../main';
-import Notification from "../components/notification";
-import { SocketContext } from "../context/socket";
-import { removeUserCredential } from "../store/authSlice";
-import { regSw,subscribe } from "../serviceWorker";
+import Notification from "../../components/notification";
+import { SocketContext } from "../../context/socket";
+import { removeUserCredential } from "../../store/authSlice";
+import { regSw,subscribe } from "../../serviceWorker";
 // import { messaging ,getToken,onMessage} from "../firebase";
 // import {  getToken ,onMessage,getMessaging} from "firebase/messaging";
 
 import { onBackgroundMessage } from "firebase/messaging/sw";
-import SearchSubscription from "../components/searchSubscription";
+import SearchSubscription from "../../components/searchSubscription";
 let accessToken =
   "pk.eyJ1IjoiZW1pbGxzaGlqdSIsImEiOiJjbHdkcXQwcXMwN2oyMmlxanpxeHV0MnpvIn0.RNUnWz60Xtvl26z65jOISw";
 
 
 
 
-import { SideBarContext } from "../context/createContext";
-import { responsiveContext } from "../context/createContext";
+import { SideBarContext } from "../../context/createContext";
+import { responsiveContext } from "../../context/createContext";
 
   
 const Home = () => {
@@ -742,12 +742,12 @@ const handleResize = () => {
   console.log("Viewport Size Changed");
   console.log("Width:", screenWidth, "Height:", screenHeight);
 
-  if (screenWidth <= 375 && screenHeight <= 667) {
+  if (screenWidth <= 786 && screenHeight <= 786) {
     console.log("Small screen");
   
     setOpen(false);
     setResponsiveMd(false);
-  } else if (screenWidth > 400 && screenHeight > 700) {
+} else {
     console.log("Large screen");
  
     setOpen(true);
@@ -808,7 +808,7 @@ const toggleDropdown=()=>{
 
 
 
-      
+{/*       
 {!responsiveMd&&(<button
   type="button"
   style={{
@@ -832,12 +832,12 @@ const toggleDropdown=()=>{
       d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
     />
   </svg>
-</button>)}
+</button>)} */}
 
 
-
+<SideBar  current={'Home'} /> 
       
-      {responsiveMd ?<SideBar  current={'Home'} /> : toggle ? <SideBar  current={'Home'} /> :null  }
+      {/* {responsiveMd ?<SideBar  current={'Home'} /> : toggle ? <SideBar  current={'Home'} /> :null  } */}
       
             
             {responsiveMd&&<div   className="absolute z-10 flex justify-end right-0 mt-4">

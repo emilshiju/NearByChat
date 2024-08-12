@@ -114,7 +114,7 @@ useEffect(() => {
 
     return (
       <div>
-      {responsiveMd&&<Sidebar current="settings" />}
+      <Sidebar current="settings" />
       <div
         className={`flex justify-start flex-col lg:flex-row`} // Changed to flex-col for smaller screens
         style={{ paddingLeft: open ?'350px' : responsiveMd ? "110px" : '0px' ,  marginTop: '100px' }}

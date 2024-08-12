@@ -43,12 +43,12 @@ const ChatRandom=()=>{
       console.log("Viewport Size Changed");
       console.log("Width:", screenWidth, "Height:", screenHeight);
     
-      if (screenWidth <= 375 && screenHeight <= 667) {
+      if (screenWidth <= 915 && screenHeight <= 915) {
         console.log("Small screen");
       
         setOpen(false);
         setResponsiveMd(false);
-      } else if (screenWidth > 400 && screenHeight > 700) {
+      } else  {
         console.log("Large screen");
      
         setOpen(true);
@@ -106,7 +106,7 @@ const ChatRandom=()=>{
 
   <div
     className={`fixed   ${
-      open ? "ml-[387px]" : "ml-[60px]"
+      open ? "ml-[387px]" : "ml-[0px] mt-12 "
     }`}
   >
     <div className="px-4 md:px-10 lg:px-20 mt-10 md:mt-52 overflow-hidden">

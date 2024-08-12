@@ -131,7 +131,7 @@ const Profile = () => {
       const screenWidth = window.screen.width;
       const screenHeight = window.screen.height;
 
-      if (screenWidth <= 375 && screenHeight <= 667) {
+      if (screenWidth <= 915 && screenHeight <= 915) {
         setOpen(false);
         setResponsiveMd(false);
       } else {
@@ -268,7 +268,7 @@ const onChangeUploadImageToFirebase=()=>{
 
       <main
         className="bg-gray-100 bg-opacity-25"
-        style={{ paddingLeft: open ? "200px" :"160px" }}
+        style={{ paddingLeft: open ? "200px" :"60px" }}
       >
 
 
