@@ -30,7 +30,6 @@ import SampleChat from "./pages/SampleChat"
 import NotificationSample from "./pages/notificationSample"
 
 const router=createBrowserRouter([
-   
     {
         path:"/:status?",
         element:(<UserProtectedRoute ><Home /></UserProtectedRoute>)
