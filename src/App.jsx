@@ -18,7 +18,7 @@ import NotificationList from "../src/pages/Notification/notificationList"
 import ChatBox from "./pages/chat/chatBox"
 import VideoCall from "./components/videoCall/videoCall"
 import PermissionNotification from "./components/permisionNotification"
-import ChatRandom from "./pages/ChatToRandomPepoles/chatRandom"
+import ChatRandom from "./pages/chatToRandomPepoles/chatRandom"
 import ConnectingToRandomPepole from "./components/connectingToRandomPepole"
 import ChatToRandomPepoles from "./components/chatToRandomPepoles"
 import Settings from "./pages/settings/settings"
@@ -28,6 +28,7 @@ import OrderSummary from "./pages/settings/orderSummary"
 import Sample from "./pages/sample"
 import SampleChat from "./pages/SampleChat"
 import NotificationSample from "./pages/notificationSample"
+
 
 const router=createBrowserRouter([
     {
