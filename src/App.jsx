@@ -4,7 +4,8 @@ import Login from "./pages/Authentication/login"
 import Register from "./pages/Authentication/register"
 
 import Home from "./pages/Home/home"
-import Profile from "./pages/Profile/profile"
+
+import Profile from "./pages/Profile/pr"
 import ProfileEditUser from "./pages/Profile/profileEdit"
 
 import UserProtectedRoute from "./route/protectedRoute/userProtectedRoute"
@@ -13,7 +14,7 @@ import ProfileView from "./pages/Profile/profileView"
 import LocationPinAnimation from "./components/locationpinAnimation";
 import { useEffect } from "react"
 import NotificationList from "../src/pages/Notification/notificationList"
-import ChatBox from "../src/pages/Chat/chatBox"
+import ChatBox from "./pages/Chat/chatBox"
 import VideoCall from "./components/videoCall/videoCall"
 import PermissionNotification from "./components/permisionNotification"
 import ChatRandom from "./pages/ChatToRandomPepoles/chatRandom"
