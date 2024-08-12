@@ -14,7 +14,7 @@ import ProfileView from "./pages/Profile/profileView"
 import LocationPinAnimation from "./components/locationpinAnimation";
 import { useEffect } from "react"
 import NotificationList from "../src/pages/Notification/notificationList"
-import ChatBox from "./pages/Chat/chatBox"
+import ChatBox from "./pages/chat/chatBox"
 import VideoCall from "./components/videoCall/videoCall"
 import PermissionNotification from "./components/permisionNotification"
 import ChatRandom from "./pages/ChatToRandomPepoles/chatRandom"
