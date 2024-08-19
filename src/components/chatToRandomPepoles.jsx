@@ -1,15 +1,15 @@
-import api from "../route/interceptors"
 
-import { useSelector ,useDispatch} from "react-redux";
+
+import { useSelector } from "react-redux";
 
 import { socket } from "../context/socket";
 import { useEffect, useState ,useRef } from "react";
 
-import SendIcon from '@mui/icons-material/Send';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
-import { getStorage, ref, uploadBytes , getDownloadURL  } from "firebase/storage";
+import { ref, uploadBytes , getDownloadURL  } from "firebase/storage";
 import { storage } from "../firebase";
 
 
@@ -94,9 +94,7 @@ const ChatToRandomPepoles=()=>{
 
       socket.on('userTouserOnlyRandomChat',(current,opposite)=>{
 
-        console.log("gottttttttttttttttttttttttttttttttttttttttt userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-        console.log(current)
-        console.log(opposite)
+       
         setIsLoading(false)
         // setOppositeUserId(opposite)
         oppositeUserId.current=opposite
@@ -106,8 +104,7 @@ const ChatToRandomPepoles=()=>{
       socket.on('userTouserLiveChatting',(message)=>{
        
 
-        console.log("messssssssageeeeeeeeee vanuuuuuuuuuuuuuuuuuuuu")
-        console.log(message)
+        
         
         setAllMessage(prev=> [...prev,message])
       })
@@ -183,8 +180,7 @@ const ChatToRandomPepoles=()=>{
 
 
       const fileType = file.type;
-        console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
-      console.log(fileType)
+        
 
 
 
@@ -198,11 +194,7 @@ const ChatToRandomPepoles=()=>{
 
     } else if (fileType.startsWith('video/')) {
       // // Handle video file
-      // console.log('This is a video file.');
-      // const videoUrl = URL.createObjectURL(file);
-      // setFilePath(videoUrl); // Set the file path to the video URL
-      // // Optionally, you can set a state to track the file type
-      // // Example: setFileType('video');
+    
 
       const videoUrl = URL.createObjectURL(file);
       setVideo(videoUrl);
@@ -216,15 +208,7 @@ const ChatToRandomPepoles=()=>{
 
 
 
-//     if (file) {
-    
-    
 
-//       const videoUrl = URL.createObjectURL(file);
-//       setVideo(videoUrl);
-//  event.target.value=null
-     
-//     }
 
      }
 
@@ -266,8 +250,7 @@ const ChatToRandomPepoles=()=>{
         console.log('Uploaded a blob or file!');
 
         getDownloadURL(snapshot.ref).then((downloadURL)=>{
-          console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnloaddddddddddddddurllllllllllllllllllllll")
-          console.log(downloadURL)
+         
 
           setSendingVideo(false)
           closeOverlay()
@@ -298,8 +281,7 @@ const ChatToRandomPepoles=()=>{
         console.log('Uploaded a blob or file!');
 
         getDownloadURL(snapshot.ref).then((downloadURL)=>{
-          console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnloaddddddddddddddurllllllllllllllllllllll")
-          console.log(downloadURL)
+          
           closeImage()
           setSendingImage(false)
           
@@ -343,12 +325,8 @@ const ChatToRandomPepoles=()=>{
 
      useEffect(()=>{
 
-   console.log("curenttttttttttttttttttttttttttttttttttttttttt oposite udddddddddddddddddddddddd")
-   console.log(oppositeUserId)
       return ()=>{
 
-        console.log("curenttttttttttttttttttttttt 33333333333       tttttttttttttttttt oposite udddddddddddddddddddddddd")
-        console.log(oppositeUserId.current)
         componentChangeSkip()
          
       }

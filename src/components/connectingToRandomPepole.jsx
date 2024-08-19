@@ -1,10 +1,10 @@
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
-import { useSelector ,useDispatch} from "react-redux";
+import { useSelector } from "react-redux";
 import  React,{ useEffect,useRef,useState } from 'react';
 import { socket } from '../context/socket';
-import { FiVideo, FiVideoOff, FiMic, FiMicOff } from "react-icons/fi";
+import {  FiMic, FiMicOff } from "react-icons/fi";
 
-import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhone, FaTimes, } from 'react-icons/fa';
+import {  FaVideo, FaVideoSlash,  } from 'react-icons/fa';
 
 
 
@@ -235,9 +235,7 @@ async function handleOffer(offer) {
 
 async function handleAnswer(answer) {
 
-  console.log("5555555555555555555555555555555555555555555555555555555555555555555555")
-
-  console.log("answerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+  
   if (!pc.current) {
     console.error("no peerconnection");
     return;
@@ -250,7 +248,7 @@ async function handleAnswer(answer) {
 }
 
 async function handleCandidate(candidate) {
-  console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222")
+
   try {
    
     if (!pc.current) {
@@ -287,7 +285,6 @@ async function hangup() {
   // hangupButton.current.disabled = true;
   muteAudButton.current.disabled = true;
 
-  // closeVideoCall()
   
 
 
@@ -345,7 +342,7 @@ async function hangup() {
     
     
  
-        //  socket.emit("randomVideoConnection", {id:receiver.current, type: "ready" });
+       
     
   };
 
@@ -413,9 +410,7 @@ async function hangup() {
       receiver.current=null
     
      
-      
-       console.log("clearning    cccccccccccccccccccccccccccllllllllllllllllllllllllllllllllllllllllllleeeeeeeeeeeeeeeeee             clearing clearing        ")
-      
+   
        if (pc.current) {
         pc.current.close();
         pc.current = null;
@@ -425,29 +420,17 @@ async function hangup() {
         setAllMessage([])
        }
       
-      // findingNextOne()
-      console.log("curent pcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
-      console.log(pc.current)
-
-      
     
-      // socket.emit('readyToChat',userId)
 
     }
 
 
 
     const handleSkip=()=>{
-      // setIsLoading(false)
+     
       setChange(false)
 
-//       remoteVideo.current=null
 
-// if (pc.current) {
-//   pc.current.close();
-//   pc.current = null;
-// }
-console.log("skipeddddddddddddddddddddddddddddddddddddddddddddddddd")
 
       socket.emit("removeUsersArray",{userId,receiver:receiver.current})
 
@@ -459,15 +442,12 @@ console.log("skipeddddddddddddddddddddddddddddddddddddddddddddddddd")
 
 
     socket.on("skippedRemoved",()=>{
-      console.log("clearning    cccccccccccccccccccccccccccllllllllllllllllllllllllllllllllllllllllllleeeeeeeeeeeeeeeeee             clearing clearing        ")
-
- 
+   
       if (pc.current) {
         pc.current.close();
         pc.current = null;
       }
-        console.log("curent pcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
-        console.log(pc.current)
+       
       
         if(allMessage.length>0){
 
@@ -491,7 +471,6 @@ console.log("skipeddddddddddddddddddddddddddddddddddddddddddddddddd")
       socket.emit('readyToChat',userId)
 
 
-      // findingNextOne()
 
     })
 
@@ -502,7 +481,6 @@ console.log("skipeddddddddddddddddddddddddddddddddddddddddddddddddd")
 
       startB()
      
-      // socket.emit('readyToChat',userId)
     
   
      
@@ -512,48 +490,26 @@ console.log("skipeddddddddddddddddddddddddddddddddddddddddddddddddd")
 
 setChange(true)
         
-                   console.log("random detailssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
                  
-                 console.log("before loading ")
-                 console.log(pc.current)
                  
              
-                 console.log("aftger loading")
-                 console.log(pc.current)
-                //  if (pc.current) {
-                //   pc.current.close();
-                //   pc.current = null;
-                // }
+              
 
      
-        console.log("got oppositeuserID 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
+    
        receiver.current=opposite
 
-       console.log(current)
-       console.log(opposite)
-    
-         
-              console.log("emiteddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
-
-              
-            
+       
       })
 
 
       socket.on('readys',(current,opposite)=>{
           setChange(true)
    
-          console.log("got oppositeuserID 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
+          
          receiver.current=opposite
   
-         console.log(current)
-         console.log(opposite)
-   
-
-           
-                console.log("emiteddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
- 
-          
+        
                 socket.emit("randomVideoConnection", {id:opposite, type: "ready" });
                     
                 
@@ -614,8 +570,7 @@ useEffect(()=>{
 
     const {userId,receiver,message}=res
     
-    console.log("current messagegggggggggggggggg vanuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
-    console.log(res)
+   
    setAllMessage(prev  =>  [...allMessage,res])
   })
 },[allMessage])
@@ -701,146 +656,6 @@ useEffect(()=>{
 
     
   return (
-//     <div className="flex position:fixed ">
-//     <div className="mr-5 mt-5 ml-5 position:fixed ">
-//       <div className="bg-gray-200 h-[330px] w-[600px] rounded-lg shadow-md">
-       
-//      {!change ?    <div role="status" className="flex flex-col items-center justify-center">
-//       <svg
-//         aria-hidden="true"
-//         className=" mt-28 w-30 h-36 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-//         viewBox="0 0 100 101"
-//         fill="none"
-//         xmlns="http://www.w3.org/2000/svg"
-//       >
-//         <path
-//           d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-//           fill="currentColor"
-//         />
-//         <path
-//           d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-//           fill="currentFill"
-//         />
-//       </svg>
-//       <span className="sr-only">Loading...</span>
-//     </div>:
-
-//       <video className="w-full h-full rounded-lg object-cover" ref={remoteVideo} autoPlay playsInline></video>
-//    }   </div>
-//       <br></br>
-//       <div className="bg-gray-200 h-[330px] w-[600px] rounded-lg shadow-md">
-//         <video className="w-full h-full rounded-lg object-cover" ref={localVideo} autoPlay playsInline></video>
-//       </div>
-//     </div>
-  
-//     <div className=" absolute flex justify-center items-center mt-4 mb-4 ml-[200px]" style={{paddingTop:"650px"}}>
-//         <div className="flex space-x-4">
-//           <button className="p-2 rounded-full bg-gray-300 hover:bg-gray-400" ref={muteAudButton}
-//             onClick={muteAudio}>
-//                 {audiostate ? <FiMic /> : <FiMicOff />}
-            
-//           </button>
-//           {/* <button className="p-2 rounded-full bg-gray-300 hover:bg-gray-400"  ref={startButton}
-//             onClick={call}>
-//             <FaPhone  className="text-gray-600" />
-//           </button> */}
-//           <button className="p-2 rounded-full bg-gray-300 hover:bg-gray-400" ref={muteVideo}
-//           onClick={pauseVideo}>
-//             {videoState?  <FaVideo className="text-gray-600" />:<FaVideoSlash className="text-gray-600" />}
-           
-//           </button>
-//           {/* <button className="p-2 rounded-full bg-gray-300 hover:bg-gray-400"      ref={hangupButton}
-//             onClick={hangB} >
-//             <FaTimes className="text-gray-600" />
-//           </button> */}
-//         </div>
-//       </div>
-
-
-//     <div className="ml-0">
-
-
-
-
-//        <div className='mt-5'>
-
-      
-//       <button class="bg-sky-500 ml-2 text-white text-3xl   px-10 py-2 rounded"  onClick={handleSkip}>
-//        Next <PlayCircleFilledWhiteIcon  style={{ fontSize: 28 }}  />
-//      </button>
-
-
-// <br></br>
-// <br></br>
-// </div>
-
-
-
-
-
-// <div className='flex'>
-
-// <div className="bg-white p-4 rounded shadow-lg relative" style={{ width: "860px", height: "550px",overflowY: "auto" }}>
-//     <br></br>
-  
-    
-//     {allMessage&&allMessage.map((a,b)=>{
-
-
-//   return (
-//     <div>  
-//     {a.userId!==userId&&<div className='flex justify-start mb-2 pl-4'>
-//     <h1>{a.message}</h1>
-   
-//     </div>}
-
-//     {a.userId==userId&&<div className='flex justify-end mb-2 pr-8'>
-//     <h1>{a.message}</h1>
- 
-//     </div>}
-   
-
-//     </div>
-
-// )})}
-
-
-
-    
-// </div>
-
-
-
-// <div className=" z-50 flex mx-4 px-4  mt-3 ml-[630px]" style={{ position: "absolute", bottom: "20px", left: "0", right: "0" }}>
-//     <input className=" w-full h-[50px] border border-blue-400 bg-white border-opacity-40 rounded px-3 py-2 bg-grey-lighter outline-none " type="text" value={currentMessage}  onChange={onChagneCurrentMessage}  onKeyDown={handleKeyDown} placeholder="Enter text..." />
-//     <svg className=" mt-3 absolute ml-[755px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="34">
-//       <path opacity=".45" fill="#263238" d="M9.153 11.603c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962zm-3.204 1.362c-.026-.307-.131 5.218 6.063 5.551 6.066-.25 6.066-5.551 6.066-5.551-6.078 1.416-12.129 0-12.129 0zm11.363 1.108s-.669 1.959-5.051 1.959c-3.505 0-5.388-1.164-5.607-1.959 0 0 5.912 1.055 10.658 0zM11.804 1.011C5.609 1.011.978 6.033.978 12.228s4.826 10.761 11.021 10.761S23.02 18.423 23.02 12.228c.001-6.195-5.021-11.217-11.216-11.217zM12 21.354c-5.273 0-9.381-3.886-9.381-9.159s3.942-9.548 9.215-9.548 9.548 4.275 9.548 9.548c-.001 5.272-4.109 9.159-9.382 9.159zm3.108-9.751c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962z"></path>
-//     </svg>
-
-//     <div className='pl-1'  onClick={onSendMessage} >
-//       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="44" height="54"  style={{ cursor:receiver.current? 'pointer' : 'not-allowed' }}  >
-//         <path d="M3.4,20.2,4.9,14,13.5,12,4.9,10,3.4,3.8a1,1,0,0,1,1.4-1.1L21.1,10.4a1,1,0,0,1,0,1.8L4.8,21.3A1,1,0,0,1,3.4,20.2Z" fill="#263238"/>
-//       </svg>
-//       </div>
-
-
-//   </div> 
-// </div>
-
-
-
-
-
- 
-
-
-        
-
-
-
-
-//     </div>
-//   </div>
 
 
 

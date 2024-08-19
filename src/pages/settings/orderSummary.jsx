@@ -3,7 +3,7 @@ import { useEffect, useState,useContext } from "react";
 import Sidebar from "../../components/sideBar"
 
 
-import { useSelector ,useDispatch} from "react-redux";
+import { useSelector } from "react-redux";
 import api from "../../route/interceptors";
 import { SideBarContext } from "../../context/createContext";
 import { responsiveContext } from "../../context/createContext";
@@ -80,108 +80,7 @@ const OrderSummary=()=>{
 
 
     return (
-        // <div>
-        //     <Sidebar  current='settings' />
-             
-           
-        //     <div  style={{ paddingLeft: "295px",marginTop:'0px' }} >
-             
-        // <br/>
-        // <br />
-
-
-            
-        //     <div className="w-full">
-        //         <div className="inline-block min-w-full align-middle">
-        //             <div className="overflow-hidden shadow">
-        //                 <table className="min-w-full divide-y divide-gray-200 table-fixed ">
-
-                            
-        //                     <thead className="bg-gray-100 ">
-        //                         <tr>
-        //                             {/* <th scope="col" className="p-4">
-        //                                 <div className="flex items-center">
-        //                                     <input
-        //                                         id="checkbox-all"
-        //                                         aria-describedby="checkbox-1"
-        //                                         type="checkbox"
-        //                                         className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 "
-        //                                     />
-        //                                     <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-        //                                 </div>
-        //                             </th> */}
-        //                             <th scope="col" className="p-4 text-xs font-medium text-left text-gray-500 uppercase " >
-        //                                 Name
-        //                             </th>
-        //                             <th scope="col" className=" text-xs font-medium text-left text-gray-500 uppercase ">
-        //                                 Max Count
-        //                             </th>
-        //                             <th scope="col" className="p-4 text-xs font-medium text-left text-gray-500 uppercase ">
-        //                                 Price
-        //                             </th>
-        //                             <th scope="col" className="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-        //                                 timePeriod
-        //                             </th>
-                                    
-                                  
-        //                             <th scope="col" className="p-4 text-xs font-medium text-center text-gray-500 uppercase  " >
-        //                                 description
-        //                             </th>
-        //                         </tr>
-        //                     </thead>
-                   
-        //                     <tbody className=" divide-y divide-gray-200 bg-gray-200 ">
-        //                     {allOrderSummary&&allOrderSummary.map((a,b)=>{
-
-        //                            return (
-                                          
-        //                             <tr className="hover:bg-gray-100 ">
-        //                                 {/* <td className="w-4 p-4">
-        //                                     <div className="flex items-center">
-        //                                         <input
-                                               
-        //                                             aria-describedby="checkbox-1"
-        //                                             type="checkbox"
-        //                                             className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 "
-        //                                         />
-        //                                         <label className="sr-only">checkbox</label>
-        //                                     </div>
-        //                                 </td> */}
-        //                                 <td className="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-        //                                     <img
-        //                                         className="w-20 h-20 rounded-full"
-        //                                         src={a.searchSubUrl}
-                                      
-        //                                         alt={`error`}
-        //                                     />
-        //                                     <div className="text-sm font-normal text-gray-500 ">
-                                                
-                
-        //                                         <div className="text-sm font-normal text-black ">{a.subscriptionName}</div>
-        //                                     </div>
-        //                                 </td>
-        //                                 <td className="max-w-sm p-4 overflow-hidden text-base font-normal text-black truncate xl:max-w-xs ">{a.maxCount}</td>
-        //                                 <td className="p-4 text-base font-medium text-black whitespace-nowrap ">{a.price}</td>
-        //                                 <td className="pl-10 text-base font-medium text-black whitespace-nowrap ">{a.timePeriod}</td>
-                                       
-        //                                 <td className="pl-20 space-x-2 whitespace-nowrap">
-        //                                     {a.description}
-                                            
-        //                                 </td>
-        //                             </tr>
-                                  
-                             
-        //                         )})}
-        //              </tbody>
-        //                 </table>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-
-
-
-        //     </div>
+       
         <div>
           {responsiveMd&&<Sidebar  />}
 

@@ -9,18 +9,12 @@ import {
     TextField,
     Typography,
     MenuItem,
-    colors,
+  
   } from "@mui/material";
   import api  from "../../route/interceptors"
-  // import {getUser} from "../../route/interceptors"
-  // import axios from "axios";
-
-  // import { DatePicker } from "@mui/x-date-pickers";
-  // import DatePicker from 'react-date-picker';
-  
-  // import  {registerInitialValues} from "../schema/registeration"
+ 
   import "../Home/home.css"
-  import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+  
   import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
   import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
   import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -73,8 +67,7 @@ import {
   
     const [gender, setGender] = useState("gender");
     const [genderBox, setGenderBox] = useState(false);
-    // const [genderError, setGenderError] = useState("feild is required");
-  
+    
     const [email, setEmail] = useState("");
     const [emailBox, setEmailBox] = useState(false);
     const [emailError, setEmailError] = useState("");
@@ -281,7 +274,7 @@ import {
         
       })
       .catch((error)=>{
-        console.log("errrorrrrrrr")
+        
         console.log(error)
         
         
@@ -394,17 +387,7 @@ import {
     }
 
 
-    const handleGoogleLogin=()=>{
-
-      api.get('/auth/google')
-      .then((response)=>{
-        console.log("999999999999999999999999999eshfishfoishfosdofjs")
-        console.log(response)
-      }).catch((error)=>{
-        console.log("7777777777777777777777777777ljifisjofhsdiofh")
-        console.log(error)
-      })
-    }
+    
 
 
     const responseMessage = async (response) => {
@@ -516,7 +499,7 @@ import {
   
                   <Grid item xs={7} spacing={1} sx={{ mt: 1 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {/* <DemoContainer components={["DatePicker"]} > */}
+                      
   
                       <DatePicker
                         //  @ts-ignore
@@ -535,7 +518,7 @@ import {
                         }}
                       />
   
-                      {/* </DemoContainer> */}
+                     
                     </LocalizationProvider>
                   </Grid>
   

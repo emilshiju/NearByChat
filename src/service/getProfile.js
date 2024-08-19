@@ -23,8 +23,7 @@ const getProfile=(userId)=>{
 
         })
         .catch((error)=>{
-            alert(error)
-            alert("get profile error")
+           console.log(error)
         })
     })
 }

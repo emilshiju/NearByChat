@@ -45,31 +45,19 @@ const Sidebar = ({current}) => {
 const screenheight = window.screen.height;
 
 
-console.log("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
-console.log(screenheight,screenwidth)
-// setScreenHeight(screenheight)
-// setScreenWidht(screenwidth)
 
 
 if(screenwidth<=915&&screenheight<=915){
 
   setOpen(false)
   setResponsiveMd(false)
-console.log("=====================================================")
+
 }else{
 
   // setOpen(true)
   setResponsiveMd(true)
 
 }
-
-// if(screenwidth>=375){
-//   setOpen(true)
-//   setResponsiveMd(true)
-// }
-
-// console.log(`Screen width: ${screenwidth}px`);
-// console.log(`Screen height: ${screenheight}px`);
 
 
   
@@ -92,15 +80,7 @@ console.log("=====================================================")
           open ? "w-72" : "w-20"
         } bg-black p-5 pt-14  h-screen  fixed overscroll-none nrelative duration-300m   `}
       >
-        {/* <ViewSidebarRoundedIcon
-        //   src="/assets/control.png"
-        
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple border-2 rounded-full ${
-            !open && "rotate-180"
-          }`}
-          onClick={() => setOpen(!open)}
-          
-        /> */}
+       
         <div className="flex gap-x-4 items-center">
           <img
           
@@ -166,7 +146,7 @@ console.log("=====================================================")
 
 
 <ViewSidebarRoundedIcon
-  // src="/assets/control.png"
+  
 
 
   className={`absolute cursor-pointer left-3 top-3 w-7 z-50 border-dark-purple border-2  ${showFullBar&& ' text-white'} ${!showFullBar&& 'rounded-full '} ${

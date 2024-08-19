@@ -1,9 +1,9 @@
 import Sidebar from "../../components/sideBar"
-import { useSelector ,useDispatch} from "react-redux";
+import { useSelector} from "react-redux";
 import { useState ,useEffect,useRef ,useContext} from "react";
 import api from "../../route/interceptors";
 import { otpSend, verifyOtp } from "../../service/otp";
-import { ToastContainer, toast, Slide } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { useNavigate } from "react-router-dom"
 
@@ -115,17 +115,14 @@ const ForgotPassword=()=>{
        
         setenterOtp(true)
 
-        console.log("butttttttttttttttttttttttttttttttonnnnnnnnnnnnnnnnn")
-        console.log(buttonRef.current)
-       
-
+        
           
 
           
 
 
 
-        // api.post('/sendOtp',{email:userDetails?.email})
+   
            otpSend(userDetails?.email)
 
 
@@ -283,8 +280,7 @@ const ForgotPassword=()=>{
 
 
 
-        // const isValidPassword=onkeyDownChangePassword()
-        // const isValidCPasswor=onkeyDownChangeConformPassword()
+        
           
         if(isValidPassword&&isValidCPasswor){
       

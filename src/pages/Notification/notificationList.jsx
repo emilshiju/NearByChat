@@ -1,12 +1,12 @@
 import React, { useEffect, useState ,useContext} from "react";
-import api from "../../route/interceptors";
+
 import connection from "../../service/connection";
 import { useSelector ,useDispatch } from "react-redux";
 import Sidebar from "../../components/sideBar";
-import { SocketContext, socket } from "../../context/socket";
+import { socket } from "../../context/socket";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../components/notification";
-import { Unconnect } from "../../service/crudConnections";
+
 import NewMessageNotificatoin from "../../components/messageNotification";
 import { removeUserCredential } from "../../store/authSlice";
 import { SideBarContext } from "../../context/createContext";

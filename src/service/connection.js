@@ -18,7 +18,7 @@ const connection=(userId )=>{
             }
         })
         .catch((error)=>{
-            alert("error")
+            console.log("error")
         })
     })
 }

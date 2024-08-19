@@ -39,7 +39,11 @@ const profileView=()=>{
 
     useEffect(()=>{
       socket.on('blockedUser',()=>{
-        alert('Your account has been blocked.');
+        toast.error("Your account has been blocked.", {
+          position: "top-right",
+          autoClose: 1000,
+        })
+        // alert('Your account has been blocked.');
         dispatch(removeUserCredential());
        
         navigate('/login');
@@ -57,8 +61,7 @@ const profileView=()=>{
     useEffect(() => {
         getProfile(receiverId).then((res) => {
           
-          {console.log("responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")}
-          {console.log(res)}
+         
           setReceiverId(res.response._id)
 
           
@@ -156,7 +159,7 @@ const profileView=()=>{
           socket.emit('connectionRequested',userName,senderId,receiverId)
      
         }catch(error){
-          alert(error)
+          console.log(error)
         }
       
           
@@ -201,8 +204,7 @@ const profileView=()=>{
         setResponsiveMd(true);
       }
 
-      console.log(screenHeight, screenWidth);
-      console.log("=====================================================");
+ 
     };
 
     // Add event listener on mount

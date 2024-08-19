@@ -10,11 +10,10 @@ import { useContext } from "react";
 import api from "../../route/interceptors";
 import { useSelector ,useDispatch} from "react-redux";
 import Button from "@mui/material/Button";
-import locationIcon from "../../assets/location.png";
-import SendIcon from "@mui/icons-material/Send";
+
+
 import Box from "@mui/material/Box";
-import profileForm, { updateImageUrl } from "../../service/profileForm";
-import LocationPinAnimation from "../../components/locationpinAnimation";
+
 import locationPinAnimation from '../../../locationPinAnimation.json';
 import NewMessageNotificatoin from "../../components/messageNotification";
 
@@ -28,25 +27,22 @@ import Map, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import Swal from "sweetalert2";
 import locationService from "../../service/locationService";
-import io from "socket.io-client";
+
 import Lottie from 'lottie-react';
 import getProfile from "../../service/getProfile";
 
-// export const socket = io("http://localhost:5000");
-// import { socket } from '../main';
 import Notification from "../../components/notification";
 import { SocketContext } from "../../context/socket";
 import { removeUserCredential } from "../../store/authSlice";
-import { regSw,subscribe } from "../../serviceWorker";
-// import { messaging ,getToken,onMessage} from "../firebase";
-// import {  getToken ,onMessage,getMessaging} from "firebase/messaging";
 
-import { onBackgroundMessage } from "firebase/messaging/sw";
+
+
+
 import SearchSubscription from "../../components/searchSubscription";
-let accessToken =
-  "pk.eyJ1IjoiZW1pbGxzaGlqdSIsImEiOiJjbHdkcXQwcXMwN2oyMmlxanpxeHV0MnpvIn0.RNUnWz60Xtvl26z65jOISw";
+// let accessToken =
+//   "pk.eyJ1IjoiZW1pbGxzaGlqdSIsImEiOiJjbHdkcXQwcXMwN2oyMmlxanpxeHV0MnpvIn0.RNUnWz60Xtvl26z65jOISw";
 
-
+const accessToken=import.meta.env.VITE_ACESSTOKEN
 
 
 import { SideBarContext } from "../../context/createContext";
@@ -80,13 +76,7 @@ const Home = () => {
 
 
   const [playAnimation, setPlayAnimation] = useState(false);
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setPlayAnimation(false);  
-  //   }, 3000);
-
-  //   return () => clearTimeout(timer);  
-  // }, []);
+ 
   useEffect(()=>{
     
 
@@ -355,61 +345,12 @@ const Home = () => {
 
 
 
-  function locationAccess() {
-    //   const options = {
-    //     enableHighAccuracy: true,
-    //     timeout: 5000,
-    //     maximumAge: 0,
-    //   };
-    // function sucess(position) {
-    //   const latitude = position.coords.latitude;
-    //   const longitude = position.coords.longitude;
-    //   // api rqueste to server to ger users
-    //   zoomToLocation(longitude, latitude);
-    // handleSearch(longitude, latitude);
-    //   // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    //   // zoomToLocation( longitude, latitude)
-    //   // setShow(true)
-    //   // console.log("kast")
-    // }
-    // function error(error) {
-    //   console.log(error);
-    //   switch (error.code) {
-    //     case error.PERMISSION_DENIED:
-    //       Swal.fire("Please enable your location!");
-    //       console.error("User denied the request for geolocation.");
-    //       break;
-    //     case error.POSITION_UNAVAILABLE:
-    //       Swal.fire("Location information is unavailable.!");
-    //       console.error("Location information is unavailable.");
-    //       break;
-    //     case error.TIMEOUT:
-    //       Swal.fire("The request to get user location timed out.!");
-    //       // console.error("The request to get user location timed out.");
-    //       break;
-    //     case error.UNKNOWN_ERROR:
-    //       Swal.fire("An unknown error occurred.!");
-    //       console.error("An unknown error occurred.");
-    //       break;
-    //   }
-    // }
-    // if ("geolocation" in navigator) {
-    //   // Get the user's current location
-    //   navigator.geolocation.getCurrentPosition(sucess, error, options);
-    // } else {
-    //   Swal.fire("oops!  Geolocation is not available in this browser.");
-    //   console.error("Geolocation is not available in this browser.");
-    // }
-  }
-
-  const [showPopup, setShowPopup] = useState(true);
-
   const changeMap = (evt) => {
     setViewState(evt.viewState);
     setShow(false);
   };
 
-  let array = [
+  const array = [
     {
       longitude: 76.2673045,
       latitude: 9.9312329,
@@ -463,26 +404,6 @@ const [newMessage,setNewMessage]=useState(null)
 
 
 
-//servier worker api 
-
-
-// Handle foreground messages
-
-
-
-// onMessage(messaging, (payload) => {
-//   alert("dsjhfdshf")
-//   console.log('Message received in foreground:', payload);
-//   // Customize the notification here if necessary
-//   const notificationTitle = payload.notification.title;
-//   const notificationOptions = {
-//     body: payload.notification.body,
-//     // icon: payload.notification.icon // Uncomment if you have an icon
-//   };
-  
- 
-// });
-
 
 
 
@@ -510,20 +431,6 @@ if (storedSubscriptionJSON) {
 })
 
 
-  // useEffect(() => {
-  //   if ('serviceWorker' in navigator) {
-  //     navigator.serviceWorker.register('firebase-messaging-sw.js')
-  //       .then((registration) => {
-  //         console.log('Service Worker registered with scope:', registration.scope);
-
-  //         // After service worker is registered, request notification permission
-  //         // requestNotificationPermission();
-  //       }).catch((err) => {
-  //         console.log('Service Worker registration failed:', err);
-  //       });
-  //   }
-  // }, []);
-
 
 
 
@@ -537,47 +444,6 @@ if (storedSubscriptionJSON) {
     
    
 
-//       try{
-       
-// // const serviceWorkerReg=await regSw()
-// // console.log(serviceWorkerReg)
-
-// let url='/firebase-messaging-sw.js'
-// await navigator.serviceWorker.register(url,{
-//   scope:"/"
-// })
- 
-  
-
-
-// console.log("ppp")
-//   //  let value=  await  subscribe(serviceWorkerReg)
-//    console.log("Kkk")
-// let currentToken =await getToken(messaging,{vapidKey:"BNpMIfIwkjf6pAglhLNan1__wNS8dFvdiDNDzK7A69E6Fol9fhzV-uqJ7lY-bQQ6mjktLg9Jig0SPwGm52_V4OI"})
-
-
-//   // let topic='all'
-
-
-//   // let ress=await getMessaging().subscribeToTopic(currentToken, topic)
-
-  
-
-// console.log("scondtoken ")
-// console.log(currentToken)
-
-  
-
-
-//  api.post('/storePushNotification',{currentToken})
-//  console.log("tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-
-
-// }catch(error){
-
-//   console.log("erorrrrrrrrrrrrrrrrrrrrrrrrrrrr ibn  browser browser browser")
-//   console.log(error)
-// }
 
 async function subscribe(serviceWorkerReg) {
   try {
@@ -659,53 +525,6 @@ try {
 
         
 
-      // navigator.serviceWorker.ready.then((reg) => {
-      //   reg.pushManager.getSubscription().then((subscription) => {
-      //     subscription
-
-      //     console.log("currrrrrrrrrrrrrrrrrrrentttttttttttttttttttttttttt")
-      //     .then((subscription) => {
-      //       if (subscription) {
-      //         // Log current subscription for debugging
-      //         console.log("Current subscription:", subscription);
-      
-      //         // Perform unsubscribe action
-      //         return subscription.unsubscribe();
-      //       } else {
-      //         console.log("No subscription found.");
-      //         throw new Error("No subscription available to unsubscribe.");
-      //       }
-      //     })
-      //     .then((successful) => {
-      //       // Handle successful unsubscription
-      //       console.log("Unsubscribed successfully:", successful);
-      //       alert("Successfully unsubscribed.");
-      //     })
-
-
-      //     // .unsubscribe()
-      //     // .then((successful) => {
-      //     //   // You've successfully unsubscribed
-      //     //   alert("clean")
-      //     // })
-      //     // .catch((e) => {
-      //     //   // Unsubscribing failed
-      //     // });
-
-      //     api.post('/UnsubscribeNotification',{subscription})
-      //     .then((res)=>{
-
-            
-          
-
-
-
-      //     })
-
-      
-           
-      //   });
-      // });
 
       
 
@@ -808,31 +627,7 @@ const toggleDropdown=()=>{
 
 
 
-{/*       
-{!responsiveMd&&(<button
-  type="button"
-  style={{
-    position: 'absolute', // or 'fixed' if you want it to stay on top while scrolling
-    top: '10px', // adjust as needed
-    right: '10px', // adjust as needed
-    zIndex: 999, // a high value to ensure it's on top
-  }}
-  onClick={toggleDropdown}
->
-  <svg
-    className="w-6 h-6"
-    aria-hidden="true"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      clipRule="evenodd"
-      fillRule="evenodd"
-      d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-    />
-  </svg>
-</button>)} */}
+
 
 
 <SideBar  current={'Home'} /> 
@@ -912,22 +707,8 @@ const toggleDropdown=()=>{
           >
             Search{" "}
           </Button>
-          {/* {object.map((count, index) => {
-            <Marker
-              key={index}
-              longitude={count.longitude}
-              latitude={count.latitude}
-            >
-              <img
-                src={locationIcon}
-                alt="Marker"
-                style={{ width: "40px", height: "40px" }}
-              />
-            </Marker>;
-          })} */}
-          {console.log(
-            "Ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp"
-          )}
+          
+          
           {users && console.log(users)}
           {users &&
             users.map((marker, index) => (
@@ -955,13 +736,7 @@ const toggleDropdown=()=>{
               </Marker>
               
             ))}
-          {/* <NavigationControl /> */}
-          {/* {showPopup && (
-      <Popup longitude={10.205309505489396} latitude={-1.8900225307315281}
-        anchor="bottom"
-        onClose={() => setShowPopup(false)}>
-        You are here
-      </Popup>)} */}
+         
                      {" "}
         </Map>
              {" "}

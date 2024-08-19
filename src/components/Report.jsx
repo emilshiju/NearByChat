@@ -1,6 +1,8 @@
-import React ,{useState} from  'react';
+import {useState} from  'react';
 import api from '../route/interceptors';
 import { useSelector } from "react-redux";
+
+import { ToastContainer, toast, Slide } from "react-toastify";
 
 
 const ReportManagement= ({reportedUser, onclose}) => {
@@ -23,14 +25,24 @@ const ReportManagement= ({reportedUser, onclose}) => {
       const handleReportSubmit=()=>{
 
         if(selectedOption.length==0){
-            alert("select anything")
+          toast.error('select anything"', {
+            position: "top-right",
+            autoClose: 1000,
+          });
+         
         }else{
 
             api.post('/submitReport',{reporter:userId,reportedUser,reason:selectedOption})
             .then((res)=>{
               if(res.data.status){
-                alert("sucessfulyy submitted")
-                onclose()
+                toast.success('Successfully submitted', {
+                  position: "top-right",
+                  autoClose: 1000,
+                  onClose: () => {
+                    onclose(); // Call your onClose function here
+                  },
+                });
+              
               }
             })
         }
@@ -41,7 +53,10 @@ const ReportManagement= ({reportedUser, onclose}) => {
      
 
     return (
-        <div  class="absolute top-5 right-10 z-50">
+      <>
+      <ToastContainer />
+   
+        <div  className="absolute top-5 right-10 z-50">
         <div id="toast-notification" className=" w-full max-w-xs p-4  bg-white rounded-lg shadow  text-gray-300" role="alert">
         <div className="flex items-center mb-3">
         <span className="mb-1 text-sm  text-black  " style={{fontSize:"24px",fontWeight:"normal"}}>Report</span>
@@ -85,7 +100,7 @@ const ReportManagement= ({reportedUser, onclose}) => {
                
             </div>
         </div>
-        
+        </>
     );
 };
 

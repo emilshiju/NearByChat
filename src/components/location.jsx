@@ -1,4 +1,4 @@
-import React from "react";
+
 import locationIcon from "../assets/location.png";
 
 const handleClick = () => {

@@ -1,9 +1,9 @@
-import ImageEditor from "../../components/ImageEditor";
+
 import SideBar from "../../components/sideBar";
-import UploadImage from "../../service/cloudinaryService";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
-import { useEffect,useContext ,useRef, useId} from "react";
+import { useEffect,useContext ,useRef} from "react";
 import getProfile from "../../service/getProfile";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
@@ -15,8 +15,9 @@ import { responsiveContext } from "../../context/createContext";
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
 
 import AddIcon from '@mui/icons-material/Add';
+import { ToastContainer, toast, Slide } from 'react-toastify';
 
-import { getStorage, ref, uploadBytes , getDownloadURL  } from "firebase/storage";
+import { ref, uploadBytes , getDownloadURL  } from "firebase/storage";
 import { storage } from "../../firebase";
 import api from "../../route/interceptors";
 
@@ -109,7 +110,11 @@ const Profile = () => {
 
   useEffect(()=>{
     socket.on('blockedUser',()=>{
-      alert('Your account has been blocked.');
+      toast.error("Your account has been blocked.", {
+        position: "top-right",
+        autoClose: 1000,
+      })
+      // alert('Your account has been blocked.');
       dispatch(removeUserCredential());
      
       navigate('/login');
@@ -139,8 +144,6 @@ const Profile = () => {
         setResponsiveMd(true);
       }
 
-      console.log(screenHeight, screenWidth);
-      console.log("=====================================================");
     };
 
     // Add event listener on mount
@@ -203,8 +206,7 @@ const onChangeUploadImageToFirebase=()=>{
         console.log('Uploaded a blob or file!');
 
         getDownloadURL(snapshot.ref).then((downloadURL)=>{
-          console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnloaddddddddddddddurllllllllllllllllllllll")
-          console.log(downloadURL)
+          
 
           api.patch('/uploadUserProfileImage',{imageUrl:downloadURL,userId})
           .then((res)=>{
@@ -302,12 +304,7 @@ const onChangeUploadImageToFirebase=()=>{
                   onChange={nickNameChange}
                 />
 
-                {/* <span
-                  className="inline-block fas fa-certificate fa-lg text-blue-500 relative mr-6 text-xl transform -translate-y-2"
-                  aria-hidden="true"
-                >
-                  <i className="fas fa-check text-white text-xs absolute inset-x-0 ml-1 mt-px"></i>
-                </span> */}
+               
               </div>
 
              
@@ -344,12 +341,7 @@ const onChangeUploadImageToFirebase=()=>{
                placeholder="Nickname"
              />
          
-             {/* <span
-               className="inline-block fas fa-certificate fa-lg text-blue-500 relative mr-6 text-xl transform -translate-y-2"
-               aria-hidden="true"
-             >
-               <i className="fas fa-check text-white text-xs absolute inset-x-0 ml-1 mt-px"></i>
-             </span> */}
+            
            </div>
          
            <div className="md:hidden mb-4">
@@ -473,32 +465,7 @@ const onChangeUploadImageToFirebase=()=>{
 
 
 
-          {/* <div className="flex flex-wrap items-center max-w-4xl mx-auto p-4">
-  {profileImage && profileImage.map((a, b) => (
-    <div 
-      key={b} 
-      className="w-full md:w-1/3 p-2 overflow-hidden"
-    >
-      <img
-        className="w-full h-full aspect-square object-cover"
-        src={a}
-        alt="Profile Background"
-      />
-      <div class="overlay bg-gray-800 bg-opacity-50 w-full h-full absolute 
-                    left-0 top-0 flex justify-center items-center space-x-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <span class="p-2 flex items-center space-x-2">
-          <i class="fas fa-heart"></i>
-          <span>412K</span>
-        </span>
-
-        <span class="p-2 flex items-center space-x-2">
-          <i class="fas fa-comment"></i>
-          <span>2,909</span>
-        </span>
-      </div>
-    </div>
-  ))}
-</div> */}
+   
 
 <div className="flex flex-wrap items-center max-w-4xl mx-auto p-4">
       {profileImage && profileImage.map((imageSrc, index) => (

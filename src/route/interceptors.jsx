@@ -1,10 +1,15 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
+
+import { useNavigate } from 'react-router-dom';
+import {  toast } from 'react-toastify';
 
 const api=axios.create({
-    // baseURL:'http://localhost:5000/'
-    baseURL:'https://anonymous10.cloud'
+    baseURL:'http://localhost:5000/'
+    // baseURL:'https://anonymous10.cloud'
 })
+
+
+
 
 
 api.interceptors.request.use((config)=>{
@@ -12,7 +17,7 @@ api.interceptors.request.use((config)=>{
   try{
 
    
-  // alert(`Request URL: ${config.url}`);
+
  
     
         if (config.data instanceof FormData) {
@@ -47,13 +52,11 @@ api.interceptors.request.use((config)=>{
       
       }catch(error){
        
-        console.log( 'ereorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',error)
+
       }
     },
     (error)=>{
-        console.log("ivideeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-        console.log(error)
-        alert("error")
+      
         return Promise.reject(error);
     }
 
@@ -67,20 +70,36 @@ api.interceptors.response.use(function (response) {
   
     return response;
   }, async function (error) {
-alert("error in intercetor")
+
+
+if(error.response.status==500){
+  // toast.error("Internal Server Error.");
+  // toast.error("Internal Server Error.");
+  toast.error("Internal Server Error.", {
+    position: "top-right",
+    autoClose: 1000,
+  })
+}
   
 if(error.response.status === 402){
-  alert(error.response.data.message)
+  toast.error(`${error.response.data.message}`, {
+    position: "top-right",
+    autoClose: 1000,
+  })
+ 
 }
 
     
     const originalRequest = error.config;
-    console.log("orginalllllllllllllllll rquestttttttttttttttttttttttttttttttttttt")
-    console.log(originalRequest)
-    console.log("stoppppppppppppppppppppppppppppppppp")
+  
     
     if(error.response.status === 403){
-      alert("account blocked")
+      // alert("account blocked")
+      toast.error(`${error.response.data.message}`, {
+        position: "top-right",
+        autoClose: 1000,
+      })
+      
     }
  
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -91,10 +110,13 @@ if(error.response.status === 402){
       } catch (refreshError) {
 
       
-        console.error('Token refresh error:', refreshError);
+       
         localStorage.removeItem('userInfo');
         localStorage.removeItem('accestoken');
-        window.location.href = '/login';
+        
+        
+        const navigate = useNavigate();
+        navigate('/login'); 
         return Promise.reject(refreshError);
       }
     }
@@ -110,7 +132,7 @@ if(error.response.status === 402){
   
     try {
       const response = await api.post('/refresh', { userName ,userId:_id});
-      // const { accesstoken } = response.data.data
+     
       const accesstoken=response.data.data
       
      

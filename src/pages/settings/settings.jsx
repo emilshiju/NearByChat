@@ -1,7 +1,7 @@
 
 import Sidebar from "../../components/sideBar"
 import { useNavigate } from "react-router-dom";
-import { useSelector ,useDispatch} from "react-redux";
+import { useSelector } from "react-redux";
 import { useState ,useEffect,useContext} from "react";
 import api from "../../route/interceptors";
 import { SideBarContext } from "../../context/createContext";
@@ -69,15 +69,11 @@ const toggleDropdown = () => {
 
 
 
-// const screenwidth = window.screen.width;
-// const screenheight = window.screen.height;
 
 const handleResize = () => {
   const screenWidth = window.screen.width;
   const screenHeight = window.screen.height;
 
-  // const screenWidth = window.innerWidth; // Use innerWidth for viewport width
-  // const screenHeight = window.innerHeight; // Use innerHeight for viewport height
 
   console.log("Viewport Size Changed");
   console.log("Width:", screenWidth, "Height:", screenHeight);

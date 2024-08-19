@@ -1,8 +1,11 @@
 import { useEffect, useState,useContext } from "react";
 import api from "../route/interceptors"
 
+import {  toast } from 'react-toastify';
 
-import { useSelector ,useDispatch} from "react-redux";
+import { ToastContainer } from 'react-toastify';
+
+import { useSelector } from "react-redux";
 
 
 import { SideBarContext } from "../context/createContext";
@@ -27,34 +30,8 @@ const Guardian = () => {
       </svg>
     );
   };
-  const Mage = () => {
-    return (
-      <svg
-        className="fill-current"
-        width="34"
-        height="36"
-        viewBox="0 0 34 36"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M17 0.333313C26.205 0.333313 33.6667 7.79498 33.6667 17V23.2733C33.6666 23.8925 33.4942 24.4994 33.1686 25.026C32.843 25.5527 32.3772 25.9782 31.8233 26.255L27 28.6666V30.3333C27.0001 31.6087 26.5128 32.8358 25.6379 33.7637C24.7629 34.6917 23.5665 35.2502 22.2933 35.325L21.9167 35.3333C21.9533 35.1518 21.9778 34.9681 21.99 34.7833L22 34.5V33.6666C22.0003 32.8257 21.6827 32.0157 21.1108 31.3991C20.539 30.7824 19.7553 30.4047 18.9167 30.3416L18.6667 30.3333H15.3333C14.4924 30.333 13.6824 30.6507 13.0657 31.2225C12.4491 31.7943 12.0714 32.5781 12.0083 33.4166L12 33.6666V34.5C12 34.785 12.0283 35.065 12.0833 35.3333H12C10.6739 35.3333 9.40214 34.8065 8.46446 33.8688C7.52678 32.9312 7 31.6594 7 30.3333V28.6666L2.17666 26.255C1.62255 25.9781 1.15656 25.5523 0.83096 25.0253C0.505361 24.4984 0.33304 23.8911 0.333329 23.2716V17C0.333329 7.79498 7.795 0.333313 17 0.333313ZM17 3.66665C13.536 3.66669 10.2079 5.01487 7.72049 7.42576C5.23307 9.83665 3.78158 13.121 3.67333 16.5833L3.66666 17V23.2733L10.3333 26.6066V29.2583L10.4583 29.1183C11.6388 27.8511 13.2669 27.0942 14.9967 27.0083L15.3333 27L18.7883 27.0016L19.16 27.0183C20.825 27.1416 22.31 27.8683 23.41 28.98L23.6667 29.2583V26.6066L30.3333 23.2733V17C30.3333 13.4638 28.9286 10.0724 26.4281 7.57189C23.9276 5.0714 20.5362 3.66665 17 3.66665V3.66665ZM10.3333 15.3333C11.2174 15.3333 12.0652 15.6845 12.6904 16.3096C13.3155 16.9347 13.6667 17.7826 13.6667 18.6666C13.6667 19.5507 13.3155 20.3985 12.6904 21.0237C12.0652 21.6488 11.2174 22 10.3333 22C9.44927 22 8.60143 21.6488 7.97631 21.0237C7.35118 20.3985 7 19.5507 7 18.6666C7 17.7826 7.35118 16.9347 7.97631 16.3096C8.60143 15.6845 9.44927 15.3333 10.3333 15.3333V15.3333ZM23.6667 15.3333C24.5507 15.3333 25.3986 15.6845 26.0237 16.3096C26.6488 16.9347 27 17.7826 27 18.6666C27 19.5507 26.6488 20.3985 26.0237 21.0237C25.3986 21.6488 24.5507 22 23.6667 22C22.7826 22 21.9348 21.6488 21.3096 21.0237C20.6845 20.3985 20.3333 19.5507 20.3333 18.6666C20.3333 17.7826 20.6845 16.9347 21.3096 16.3096C21.9348 15.6845 22.7826 15.3333 23.6667 15.3333V15.3333Z" />
-      </svg>
-    );
-  };
-  const Phantom = () => {
-    return (
-      <svg
-        className="fill-current"
-        width="30"
-        height="35"
-        viewBox="0 0 30 35"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M15 0.333313C18.7572 0.333313 22.3606 1.82587 25.0173 4.48263C27.6741 7.1394 29.1667 10.7427 29.1667 14.5C29.1667 25.3333 20 34.5 15 34.5C10 34.5 0.833328 25.3333 0.833328 14.5C0.833328 10.7427 2.32588 7.1394 4.98265 4.48263C7.63942 1.82587 11.2428 0.333313 15 0.333313ZM15 3.66665C12.1268 3.66665 9.37132 4.80801 7.33967 6.83966C5.30803 8.8713 4.16666 11.6268 4.16666 14.5C4.16666 22.49 11.1083 31.1666 15 31.1666C18.8917 31.1666 25.8333 22.49 25.8333 14.5C25.8333 11.6268 24.692 8.8713 22.6603 6.83966C20.6287 4.80801 17.8732 3.66665 15 3.66665ZM24.1667 15.3333C24.4333 15.3333 24.6983 15.3466 24.9583 15.375C25.0764 16.4873 24.9442 17.612 24.5714 18.6667C24.1986 19.7213 23.5945 20.6792 22.8036 21.4702C22.0126 22.2612 21.0547 22.8652 20 23.2381C18.9454 23.6109 17.8207 23.7431 16.7083 23.625C16.5973 22.5791 16.7075 21.5216 17.0317 20.5212C17.356 19.5207 17.887 18.5996 18.5903 17.8176C19.2937 17.0357 20.1536 16.4104 21.1143 15.9824C22.075 15.5544 23.115 15.3333 24.1667 15.3333ZM5.83333 15.3333C6.88504 15.3333 7.92501 15.5544 8.8857 15.9824C9.84638 16.4104 10.7063 17.0357 11.4097 17.8176C12.113 18.5996 12.644 19.5207 12.9683 20.5212C13.2925 21.5216 13.4027 22.5791 13.2917 23.625C12.1793 23.7431 11.0546 23.6109 9.99996 23.2381C8.94531 22.8652 7.98741 22.2612 7.19643 21.4702C6.40546 20.6792 5.80143 19.7213 5.42859 18.6667C5.05575 17.612 4.92355 16.4873 5.04166 15.375C5.3 15.3466 5.56666 15.3333 5.83333 15.3333Z" />
-      </svg>
-    );
-  };
+  
+  
   const RightIcon = () => {
     return (
       <svg
@@ -84,8 +61,7 @@ const Guardian = () => {
   ];
 
 
-  {console.log("alllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")}
-  // {console.log(allSubscription)}
+
 
 
 
@@ -118,12 +94,7 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
           }
 
           
-          // if(res.data.data){
-          //   alert("yes")
-          //   alert(res.data.data.length)
-          //   onClose()
-          //   // setAllSubscription(res.data.data)
-          // }
+         
         })
 
       },[])
@@ -154,7 +125,12 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
       );
 
       if (!res) {
-          alert("Razorpay SDK failed to load. Are you online?");
+        toast.error("Razorpay SDK failed to load. Are you online?", {
+          position: "top-right",
+          autoClose: 1000,
+        })
+       
+          // alert("Razorpay SDK failed to load. Are you online?");
           return;
       }
 
@@ -163,7 +139,11 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
        const result = await api.post('/payment/order',{id:userInfo._id,amount:price})
 
        if (!result) {
-           alert("Server error. Are you online?");
+        toast.error("Server error. Are you online?", {
+          position: "top-right",
+          autoClose: 1000,
+        })
+          //  alert("Server error. Are you online?");
            return;
        }
 
@@ -208,7 +188,11 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
         modal: {
             ondismiss: function () {
                 // Handle the cancel action
-                alert("Payment was canceled. Please try again.");
+                toast.error("Payment was canceled. Please try again.", {
+                  position: "top-right",
+                  autoClose: 1000,
+                })
+                // alert("Payment was canceled. Please try again.");
                 // Optionally, you could also send a request to your server to update the order status or handle any clean-up.
             }
         }
@@ -228,6 +212,7 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
       
     return (
         <>
+         <ToastContainer />
             {responsiveMd==true&&<div className="fixed left-[400px] w-[1000px] h-[600px] mt-16 z-50">
       <div className="bg-gray-300 font-sans lg:bg-transparent flex flex-col lg:flex-row absolute justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 px-5 xl:px-0 py-8 lg:py-0 w-full gap-6 items-center lg:items-stretch">
         {allSubscription?.map((data, index) => (
@@ -281,7 +266,7 @@ const SearchSubscription=({onClose,SubscriptionFinishMessage})=>{
               <div className="h-32">
                 <div className="bottom-6 left-6 right-6 absolute">
                   <div className="flex justify-start items-baseline">
-                    <span className="text-[32px] font-bold">{data.price}</span>
+                    <span className="text-[32px] font-bold">₹ {data.price}</span>
                   </div>
                   <button className="w-full px-4 py-3 bg-[#FFF5FA] text-[#FF1D89] group-hover:text-white group-hover:bg-[#FF1D89] rounded-xl mt-6 font-semibold text-xl" onClick={()=>displayRazorpay(data._id,data.price)}>
                     Choose

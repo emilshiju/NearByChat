@@ -9,23 +9,23 @@ import {
     Button,
     Grid,
   } from "@mui/material";
-  import { useState } from "react";
+  
   import { Link } from "react-router-dom";
 
   import { ToastContainer, toast, Slide } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   
   import { Formik,Form } from 'formik'
-  import * as Yup from 'yup'
+ 
   import { validationSchema } from "../../schema/loginSchema";
 
   import { GoogleLogin } from '@react-oauth/google'
 import api from '../../route/interceptors';
 
 import { jwtDecode } from "jwt-decode";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUserCredential,removeUserCredential } from "../../store/authSlice";
+import { setUserCredential } from "../../store/authSlice";
 
   
   
@@ -61,19 +61,14 @@ import { setUserCredential,removeUserCredential } from "../../store/authSlice";
     const handleLogin =async (values, { setSubmitting, setErrors,setFieldError }) => {
       
      
-        let email=values.email
-        let password=values.password
-        console.log("requst")
-        console.log(email)
-        console.log(password)
+        const email=values.email
+        const password=values.password
+       
   
        api.post('/login',{email,password})
        .then((response)=>{
   
-        console.log("response")
-        console.log(response)
-     
-        console.log(response)
+        
         if(response.data.status){
           dispatch(setUserCredential({user:response.data.data,accestoken:response.data.AccessToken}))
               showToastMessage()
