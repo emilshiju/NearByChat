@@ -5,7 +5,7 @@ import Register from "./pages/Authentication/register"
 
 import Home from "./pages/Home/home"
 
-import Profile from "./pages/Profile/Profile"
+import Profile from "./pages/Profile/profile"
 
 import ProfileEditUser from "./pages/Profile/profileEdit"
 
@@ -18,7 +18,7 @@ import NotificationList from "../src/pages/Notification/notificationList"
 import ChatBox from "./pages/Chat/chatBox"
 import VideoCall from "./components/videoCall/videoCall"
 import PermissionNotification from "./components/permisionNotification"
-import ChatRandom from "./pages/ChatToRandomPepoles/ChatRandom"
+import ChatRandom from "./pages/ChatToRandomPepoles/chatRandom"
 import ConnectingToRandomPepole from "./components/connectingToRandomPepole"
 import ChatToRandomPepoles from "./components/chatToRandomPepoles"
 import Settings from "./pages/Settings/settings"
