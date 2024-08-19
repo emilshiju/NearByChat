@@ -5,7 +5,7 @@ import Register from "./pages/Authentication/register"
 
 import Home from "./pages/Home/home"
 
-import Profile from "./pages/Profile/Profile"
+import Profile from "./pages/Profile/profile"
 
 import ProfileEditUser from "./pages/Profile/profileEdit"
 
