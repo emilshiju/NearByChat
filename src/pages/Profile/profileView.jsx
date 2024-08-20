@@ -555,11 +555,11 @@ const profileView=()=>{
                 src={imageSrc}
                 alt="Profile Background"
               />
-              <div className="overlay bg-gray-300 bg-opacity-50 w-full h-full absolute left-0 top-0 flex justify-center items-center space-x-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              {/* <div className="overlay bg-gray-300 bg-opacity-50 w-full h-full absolute left-0 top-0 flex justify-center items-center space-x-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <span className="flex items-center space-x-2 text-white cursor-pointer hover:bg-gray-700 rounded-full p-1">
                   <i className="fas fa-trash" onClick={() => onChangedeleteImage(index)}></i>
                 </span>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
