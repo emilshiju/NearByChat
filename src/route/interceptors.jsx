@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import {  toast } from 'react-toastify';
 
 const api=axios.create({
-    // baseURL:'http://localhost:5000/'
-    baseURL:'https://anonymous10.cloud'
+    baseURL:'http://localhost:5000/'
+    // baseURL:'https://anonymous10.cloud'
 })
 
 

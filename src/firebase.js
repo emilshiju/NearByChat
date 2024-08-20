@@ -8,14 +8,16 @@ import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB-H-jhHhTHYriHpC_7FOg1WIbQ-V-XU6c",
-  authDomain: "nearbychat-3e0c8.firebaseapp.com",
-  projectId: "nearbychat-3e0c8",
-  storageBucket: "nearbychat-3e0c8.appspot.com",
-  messagingSenderId: "151747273533",
-  appId: "1:151747273533:web:377e60cb365b853f4a5b54",
-  measurementId: "G-JFK3S5YQ8X"
+  apiKey: "AIzaSyARg5ia9_lpCuKOnptjFjl9bAGE2VfXyKI",
+  authDomain: "near-by-chat.firebaseapp.com",
+  projectId: "near-by-chat",
+  storageBucket: "near-by-chat.appspot.com",
+  messagingSenderId: "273373396955",
+  appId: "1:273373396955:web:147eb76ce4130b710031fe",
+  measurementId: "G-VZ7N56F40D"
 };
+
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
