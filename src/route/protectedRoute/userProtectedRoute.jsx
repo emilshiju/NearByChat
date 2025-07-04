@@ -1,7 +1,7 @@
 
 import React ,{useState,useEffect }from 'react'
 import {useDispatch, useSelector} from "react-redux"
-import {Navigate, useLocation,useNavigate} from "react-router-dom"
+import {Navigate,useNavigate} from "react-router-dom"
 import api from '../interceptors'
 import io from "socket.io-client";
 import { removeUserCredential } from '../../store/authSlice'
@@ -29,8 +29,7 @@ const UserProtectedRoute=({ children })=>{
                 navigate('/login');
               }
             } catch (error) {
-              console.error('Failed to fetch user status:', error);
-              // Optionally handle the error, e.g., navigate to an error page or show a notification
+              
             }
           };
       

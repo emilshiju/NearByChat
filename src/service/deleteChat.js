@@ -64,7 +64,7 @@ export const userTouserBlock=(chatRoomId,userId)=>{
 export const userTouserUnblock=(chatRoomId,userId)=>{
 
     return new Promise((resolve,reject)=>{
-        alert("poi")
+    
         try{
 
         api.patch('/userTouserUnblock',{chatRoomId,userId})
@@ -74,7 +74,7 @@ export const userTouserUnblock=(chatRoomId,userId)=>{
             }
         })
     }catch(error){
-        console.log("ererror erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+   
         console.log(error)
     }
 

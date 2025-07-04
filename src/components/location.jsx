@@ -1,4 +1,3 @@
-import React from "react";
 import locationIcon from "../assets/location.png";
 
 const handleClick = () => {
@@ -6,7 +5,6 @@ const handleClick = () => {
 };
 
 const locationMarker = () => {
-
   return (
     <div
       className="custom-marker"
@@ -22,4 +20,4 @@ const locationMarker = () => {
   );
 };
 
-export default locationMarker
+export default locationMarker;

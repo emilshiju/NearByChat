@@ -1,8 +1,7 @@
 
-import React ,{useEffect, useState} from 'react'
 import {useSelector} from "react-redux"
-import {Navigate, useLocation, useParams} from "react-router-dom"
-import api from '../interceptors'
+import {Navigate, } from "react-router-dom"
+
 
 
 
@@ -11,15 +10,7 @@ const ProtectedRoute=({ children })=>{
 
    let status=true
      
-    // let [userStatus,setuserStatus]=useState('')
-    // useEffect(()=>{
-    //     api.get(`/userStatus/${user._id}`)
-    //     .then((response)=>{
-    //        let  sta=response.data.status
-    //         // alert(response.data.status)
-    //        setuserStatus(sta)
-    //     })
-    // },[])
+    
 
 
    

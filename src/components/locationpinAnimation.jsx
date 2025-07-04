@@ -1,7 +1,7 @@
 import Lottie from 'lottie-react';
 import {useState ,useEffect} from 'react';
 import locationPinAnimation from '../../locationPinAnimation.json';
-import React from 'react';
+
 
 
 

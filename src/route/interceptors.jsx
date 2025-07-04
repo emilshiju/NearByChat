@@ -2,8 +2,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const api=axios.create({
-    // baseURL:'http://localhost:5000/',
-    baseURL:'https://siof.site'
+    baseURL:'http://localhost:5000/'
 })
 
 

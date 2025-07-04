@@ -14,7 +14,7 @@ const UploadImage=async (formData)=>{
         if(response.data.status){
         resolve(response.data.result)
         }else{
-        alert("error")
+        console.log("error")
         }
     })
     .catch((error)=>{
